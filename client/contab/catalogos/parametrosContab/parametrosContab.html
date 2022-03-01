@@ -1,0 +1,340 @@
+
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+        <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+
+        <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        <li ng-if="parametrosContab.docState"><a href="#" class="navbar_custom_small_header"><em>Contab - Parámetros</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                        <li ng-if="!parametrosContab.docState"><a href="#" class="navbar_custom_small_header"><em>Contab - Parámetros</em> </a></li>
+
+                        <li><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                        <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+
+                        <li class="divider-vertical-small"></li>
+
+                        <li><a href="#" ng-click="nuevo()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                        <li><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+
+        <form role="form"
+              name="vacacionesForm"
+              novalidate
+              style="margin-top: 15px; text-align: left; font-size: small; ">
+
+              <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                  <span style="color: #004776; font-size: medium; ">Cuentas contables: </span>
+                  <hr style="margin-top: 0; " class="blueLine">
+              </div>
+
+              <div class="row row-centered">
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Activos: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- activo1 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.activo1"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- activo2 -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm grisBackground"
+                                  ng-model="parametrosContab.activo2"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Pasivos: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- pasivo1 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.pasivo1"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- pasivo2 -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm grisBackground"
+                                  ng-model="parametrosContab.pasivo2"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row row-centered">
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Capital: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- capital1 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.capital1"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- capital2 -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm grisBackground"
+                                  ng-model="parametrosContab.capital2"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+              </div>
+
+
+              <div class="row row-centered">
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Ingresos: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- ingresos1 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.ingresos1"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- ingresos2 -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm grisBackground"
+                                  ng-model="parametrosContab.ingresos2"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Egresos: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- egresos1 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.egresos1"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- egresos2 -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm grisBackground"
+                                  ng-model="parametrosContab.egresos2"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row row-centered">
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Cuenta GyP: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- cuentaGyP -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.cuentaGyP"
+                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista2"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                  </div>
+              </div>
+
+              <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                  <span style="color: #004776; font-size: medium; ">Monedas: </span>
+                  <hr style="margin-top: 0; " class="blueLine">
+              </div>
+
+              <div class="row row-centered">
+                  <!-- multiMoneda -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label>
+                              <input type="checkbox"
+                                     ng-model="parametrosContab.multiMoneda"
+                                     ng-change="setIsEdited()">
+                              Multimoneda
+                          </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group" style="text-align: right; ">
+                          <label for="empleado">Monedas: </label>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- moneda1 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.moneda1"
+                                  ng-options="item.moneda as item.simbolo for item in monedas | orderBy: 'simbolo' "
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- moneda2 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.moneda2"
+                                  ng-options="item.moneda as item.simbolo for item in monedas | orderBy: 'simbolo' "
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-sm-2 col-centered">
+                      <!-- moneda3 -->
+                      <div class="form-group">
+                          <select class="form-control input-sm myinput-sm"
+                                  ng-model="parametrosContab.moneda3"
+                                  ng-options="item.moneda as item.simbolo for item in monedas | orderBy: 'simbolo' "
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+
+              </div>
+
+
+              <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                  <span style="color: #004776; font-size: medium; ">Varios: </span>
+                  <hr style="margin-top: 0; " class="blueLine">
+              </div>
+
+              <div class="row row-centered">
+                  <!-- numeracionAsientosSeparadaFlag -->
+                  <div class="col-sm-4 col-centered">
+                      <div class="form-group">
+                          <label>
+                              <input type="checkbox"
+                                     ng-model="parametrosContab.numeracionAsientosSeparadaFlag"
+                                     ng-change="setIsEdited()">
+                              Númeración separada de acuerdo al tipo de los asientos contables
+                          </label>
+                      </div>
+                  </div>
+                  <!-- cierreContabPermitirAsientosDescuadrados -->
+                  <div class="col-sm-4 col-centered">
+                      <div class="form-group">
+                          <label>
+                              <input type="checkbox"
+                                     ng-model="parametrosContab.cierreContabPermitirAsientosDescuadrados"
+                                     ng-change="setIsEdited()">
+                              Cierre contable: permitir asientos contables descuadrados
+                          </label>
+                      </div>
+                  </div>
+              </div>
+
+          </form>
+
+    </div>
+</div>

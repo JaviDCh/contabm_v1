@@ -1,0 +1,147 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        Asientos Contables - Importar asientos contables desde un archivo de texto
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                <div ng-show="showProgress">
+                    <span style="font-size: small; font-weight: bold; ">
+                        ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaContabSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Importar asientos contables desde un archivo de texto</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Esta función le permite importar asientos contables desde un archivo de texto.
+                        </p>
+                        <p>
+                            <b>Nota importante: </b>
+                            Esta función asume que el archivo de texto usado para importar los asientos contables, fue
+                            producido con la función <em><b>Exportar</b></em>, que acompaña a esta función en el
+                            menú <em>Copiar</em> de esta página.
+                        </p>
+                        <p>
+                            Ud. debe hacer: (1) un click en el link que permite seleccionar y cargar el archivo que contiene
+                            los asientos contables a importar. Luego, (2) debe hacer un click en el botón <em>Importar</em>.
+                        </p>
+                        <p>
+                            <b>Notas: </b>
+                        </p>
+                        <ol>
+                            <li>
+                                Ud. podrá importar asientos contables <b>solo</b> si todos ellos corresponden al mismo
+                                mes y al mismo año.
+                            </li>
+                            <li>
+                                Esta función importa los asientos contables que existen en el archivo de texto,
+                                a la compañía <em>Contab</em> seleccionada.
+                            </li>
+                            <li>
+                                Si Ud. marca la opción <em>Mantener el número de cada asiento contable</em>, no deben
+                                existir asientos contables <b>con ese mismo número</b> en la compañía <em>Contab</em>
+                                seleccionada. De otra manera, este proceso fallará e indicará esa razón al usuario.
+                            </li>
+                            <li>
+                                Todas las cuentas contables usadas en las partidas de los asientos contables a importar,
+                                deben existir en la compañía <em>Contab</em> seleccionada.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form name="importarAsientosContablesDesdeArchivoTexto_Form"
+                      id="importarAsientosContablesDesdeArchivoTexto_Form"
+                      ng-submit="importarAsientosContablesDesdeArchivoTexto_submit_Form()"
+                      class="form-horizontal"
+                      role="form"
+                      novalidate>
+
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+                            <fieldset class="scheduler-border" style="font-size: x-small; ">
+                                <legend class="scheduler-border-xsm">Opciones: </legend>
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"
+                                               name="ordenarPorFechaRegistro"
+                                               ng-model="parametros.mantenerNumerosAsientosContables"
+                                               style="margin-bottom: 10px; ">
+                                         Mantener números asignados a los asientos a importar
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <input type="file"
+                       id = "fileInput"
+                       accept = ".txt"
+                       multiple = "false"
+                       style="display:none"
+                       onchange = "angular.element(this).scope().uploadFile(this.files)">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-0" style="text-align: left; ">
+                <!-- nótese como usamos un label para hacer un click al Input; la idea es *ocultar* el Input y
+                     mostrar, más bien, este label al cual podemos aplicar un estilo mucho más fácilmente -->
+                <label for="fileInput">
+                    <span class="showAsLink">Seleccione un archivo ...</span>
+                </label>
+            </div>
+            <div class="col-sm-6 col-sm-offset-0">
+                <button type="submit" form="importarAsientosContablesDesdeArchivoTexto_Form" class="btn btn-sm btn-primary" style="margin-right: 15px; min-width: 80px; ">Importar</button>
+                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 15px; min-width: 80px; ">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

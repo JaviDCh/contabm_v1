@@ -1,0 +1,12 @@
+
+{
+    "sqlServer_db_contab_dbName": "dbContabArsa",
+    "sqlServer_db_contab_userName": "sa",
+    "sqlServer_db_contab_userPwd": "isabel",
+
+    "public": {
+        "collectionFS_path_templates": "c:/contabm_files/templates",
+        "collectionFS_path_tempFiles": "c:/contabm_files/temp",
+        "contabSysNet_app_address": "http://localhost:13515"
+    }
+}

@@ -1,0 +1,162 @@
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+        <div style="text-align: right; font-style: italic; ">
+            <span style="color: dodgerblue">{{ companiaSeleccionada.nombreCorto }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+
+<tabset>
+    <tab heading="Cuentas bancarias">
+
+        <div class="row" style="margin-top: 15px; ">
+            <div class="col-sm-10 col-sm-offset-1">
+                <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Bancos - Cuentas bancarias</a></li>
+        
+                                <li><a href="#" ng-click="grabarCuentasBancarias()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div> 
+        </div>
+
+        <div class="row" style="text-align: center; ">
+            <div class="col-sm-5 col-sm-offset-1">
+
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Bancos </a></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoBanco()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="bancos_ui_grid"
+                    ui-grid-edit
+                    ui-grid-cellnav
+                    ui-grid-selection
+                    ui-grid-resize-columns
+                    ui-grid-pinning
+                    class="angularGrid"
+                    style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+
+            <div class="col-sm-5 col-sm-offset-0">
+
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Agencia </a></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoAgencia()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="agencias_ui_grid"
+                    ui-grid-edit
+                    ui-grid-cellnav
+                    ui-grid-selection
+                    ui-grid-resize-columns
+                    ui-grid-pinning
+                    class="angularGrid"
+                    style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+
+            </div>
+        </div>
+
+
+        <div class="row" style="text-align: center; ">
+            <div class="col-sm-10 col-sm-offset-1">
+
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Cuentas bancarias </a></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoCuentaBancaria()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="cuentasBancarias_ui_grid"
+                    ui-grid-edit
+                    ui-grid-cellnav
+                    ui-grid-selection
+                    ui-grid-resize-columns
+                    ui-grid-pinning
+                    class="angularGrid"
+                    style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+        </div>
+    </tab>
+
+    <tab heading="Chequeras">
+        <div class="row" style="text-align: center; ">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <p style="text-align: left; margin-top: 15px; margin-left: 10px; ">{{ cuentaBancaria_ChequeraSeleccionada }}</p>
+
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Chequeras </a></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevaChequera()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li>
+                                <li class="divider-vertical-small"></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="corregirChequera()">Corregir <span class="fa fa-cog"></span></a></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="chequeras_ui_grid"
+                     ui-grid-edit
+                     ui-grid-cellnav
+                     ui-grid-selection
+                     ui-grid-resize-columns
+                     class="angularGrid"
+                     style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+        </div>
+    </tab>
+</tabSet>

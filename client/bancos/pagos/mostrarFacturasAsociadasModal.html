@@ -1,0 +1,75 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Pagos - Facturas asociadas al pago</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+
+                <div class="col-sm-4" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                  <table style="font-size: x-small; " class="table table-condensed table-striped table-bordered table-hover table-responsive">
+                      <thead>
+                          <tr>
+                              <th style="text-align: left; ">Factura</th>
+                              <th style="text-align: center; ">F emisión</th>
+                              <th style="text-align: center; ">F recepción</th>
+                              <th style="text-align: center; ">#</th>
+                              <th style="text-align: left; ">Concepto</th>
+                              <th style="text-align: right; ">Total a pagar</th>
+                              <th style="text-align: right; ">Saldo</th>
+                              <th style="text-align: left; ">Estado</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="cuotaFactura in cuotasFacturaAsociadasList">
+                              <td style="text-align: left; ">
+                                  <a href="#" ng-click="mostrarFacturaSeleccionada(cuotaFactura)">{{ cuotaFactura.numeroFactura }}</a>
+                              </td>
+                              <td style="text-align: center; ">{{ cuotaFactura.fechaEmision }}</td>
+                              <td style="text-align: center; ">{{ cuotaFactura.fechaRecepcion }}</td>
+                              <td style="text-align: center; ">{{ cuotaFactura.numeroCuota }}</td>
+                              <td style="text-align: left; ">
+                                  <a href="#" ng-click="mostrarFacturaSeleccionada(cuotaFactura)">{{ cuotaFactura.concepto }}</a>
+                              </td>
+                              <td style="text-align: right; ">{{ cuotaFactura.totalCuota | currencyFilter }}</td>
+                              <td style="text-align: right; ">{{ cuotaFactura.saldoCuota | currencyFilter }}</td>
+                              <td style="text-align: left; ">{{ cuotaFactura.estadoCuota | nombreEstadoFactura }}</td>
+                          </tr>
+                      </tbody>
+                      <tfoot>
+                      </tfoot>
+                  </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; ">Cerrar</button>
+</div>

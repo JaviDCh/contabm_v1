@@ -1,0 +1,246 @@
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div>
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li ng-if="asientoContable.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Asientos contables</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!asientoContable.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Asientos contables</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+                    <li class="divider-vertical-small"></li>
+                    <li><a href="#" ng-click="imprimir()" class="navbar_custom_small_node">Imprimir&nbsp;&nbsp;<span class="fa fa-print"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion' && !vieneDeAfuera"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion' && asientoContable.numero < 0"><a href="#" ng-click="asignarNumeroContab()" class="navbar_custom_small_node">Asignar número Contab</a></li>
+                    <li ng-if="origen == 'edicion' && asientoContable.moneda == asientoContable.monedaOriginal"><a href="#" ng-click="convertirAOtraMoneda()" class="navbar_custom_small_node">Convertir&nbsp;&nbsp;<span class="fa fa-clone"></span></a></li>
+
+                    <li class="dropdown" ng-if="origen=='edicion'">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Copiar <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="exportarAsientoContable()" class="navbar_custom_small_node">Exportar&nbsp;&nbsp;<span class="fa fa-share"></span></a></li>
+                            <li><a href="#" ng-click="importarAsientoContable()" class="navbar_custom_small_node">Importar&nbsp;&nbsp;<span class="fa fa-reply"></span></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-if="!vieneDeAfuera"><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                    <li ng-if="vieneDeAfuera"><a href="#" ng-click="windowClose()" class="navbar_custom_small_node_red">Cerrar <span class="fa fa-times-circle"></span></a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <input type="file"
+           id = "fileInput"
+           accept = ".txt"
+           multiple = "false"
+           onchange = "angular.element(this).scope().uploadFile(this.files)"
+           ng-show="false">
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form
+                      role="form"
+                      name="asientosForm"
+                      novalidate
+                      style="margin-top: 5px; text-align: left; font-size: small; ">
+
+                    <div>
+                        <div class="row row-centered">
+                            <!-- número -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label>Número</label><br />
+                                    <span  style="color: #337AB7; font-weight: bold; ">
+                                        {{ asientoContable.numero }}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- tipo -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="tipo">Tipo</label>
+                                    <select class="form-control"
+                                            name="tipo"
+                                            id="tipo"
+                                            ng-model="asientoContable.tipo"
+                                            ng-change="setIsEdited()"
+                                            ng-options="item.tipo as item.descripcion for item in tiposAsientoContable | orderBy:'descripcion'"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            required></select>
+                                </div>
+                            </div>
+                            <!-- fecha -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="fechaEmision">Fecha</label>
+                                    <input type="date"
+                                           name="fecha"
+                                           id="fecha"
+                                           class="form-control"
+                                           ng-model="asientoContable.fecha"
+                                           ng-change="fechaChanged()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-centered">
+                                <br>
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox"
+                                               ng-model="asientoContable.asientoTipoCierreAnualFlag"
+                                               ng-change="setIsEdited()">
+                                        Cierre anual
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <!-- moneda -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="moneda">Moneda</label>
+                                    <select class="form-control"
+                                            name="moneda"
+                                            id="moneda"
+                                            ng-model="asientoContable.moneda"
+                                            ng-change="setIsEdited('moneda')"
+                                            ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            required></select>
+                                </div>
+                            </div>
+                            <!-- monedaOriginal -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label>Moneda original</label><br />
+                                    <span>
+                                        {{ asientoContable.monedaOriginal | monedaDescripcionFilter }}
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- factorCambio -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="factorCambio">Factor cambio</label>
+                                    <input type="number"
+                                           name="factorCambio"
+                                           id="factorCambio"
+                                           class="form-control"
+                                           ng-model="asientoContable.factorDeCambio"
+                                           ng-change="setIsEdited()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-centered">
+                                <br>
+                                <div class="form-group">
+                                    <span ng-show="asientoContable.provieneDe" style="font-weight: bold; ">Origen: </span>
+                                    {{ asientoContable.provieneDe ? asientoContable.provieneDe : '' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <!-- descripcion -->
+                            <div class="col-sm-11 col-centered">
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción</label>
+                                    <textarea name="descripcion"
+                                           id="descripcion"
+                                           class="form-control"
+                                           ng-model="asientoContable.descripcion"
+                                           ng-change="setIsEdited()"
+                                           ng-model-options="{ updateOn: 'blur' }"
+                                           rows="2"
+                                           ng-required="true">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="text-align: center; ">
+
+                            <div class="col-sm-12 col-sm-offset-0">
+                                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                                    <div class="container-fluid">
+                                        <div class="navbar-collapse collapse">
+                                            <ul class="nav navbar-nav">
+                                                <li><a class="navbar_custom_small_header">Partidas </a></li>
+                                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="agregarPartida()" ng-if="origen=='edicion'">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="cuadrarAsientoContable()" ng-if="origen=='edicion'">Cuadrar asiento <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+                                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="renumerarPartidas()" ng-if="origen=='edicion'">Renumerar partidas <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+                                                <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="helpParaCuentasContables()" ng-if="origen=='edicion'"> <i style="color: darkgray; " class="fa fa-search"></i></a></li>
+
+                                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+
+                                <div ui-grid="partidas_ui_grid"
+                                     ui-grid-edit
+                                     ui-grid-cellnav
+                                     ui-grid-resize-columns
+                                     ui-grid-selection
+                                     class="angularGrid"
+                                     style="height: 300px; width: 100%; ">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br />
+
+                        <div class="row row-centered">
+                            <div class="col-sm-11 col-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; "> 
+                                <!-- ingreso, ult actualización y usuario  -->
+                                <div class="col-sm-4" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Ingreso: </label>
+                                    <br />
+                                    <span>{{ asientoContable.ingreso | date:'dd-MM-yyyy hh:mm a' }} </span>
+                                </div>
+                                <div class="col-sm-4" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Ult act: </label>
+                                    <br />
+                                    <span>{{ asientoContable.ultAct | date:'dd-MM-yyyy hh:mm a' }} </span>
+                                </div>
+                                <div class="col-sm-4" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Usuario: </label>
+                                    <br />
+                                    <span>{{ asientoContable.usuario }} </span>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

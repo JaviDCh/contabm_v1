@@ -1,0 +1,37 @@
+{
+  "name": "contabm_v2",
+  "private": true,
+  "scripts": {
+    "start": "run.bat"
+  },
+  "dependencies": {
+    "@types/angular": "^1.6.32",
+    "@types/angular-meteor": "^0.8.32",
+    "@types/es6-promise": "0.0.33",
+    "@types/lodash": "^4.14.77",
+    "@types/meteor": "^1.4.14",
+    "@types/sequelize": "^4.27.14",
+    "angular": "1.5.11",
+    "angular-meteor": "1.3.9",
+    "angular-ui-grid": "4.0.0",
+    "@uirouter/angularjs": "0.3.2",
+    "babel-runtime": "6.20.0",
+    "bcrypt": "1.0.2",
+    "decimal.js": "^9.0.1",
+    "docxtemplater": "3.8.1",
+    "file-saver": "1.3.3",
+    "jszip": "2.0.0",
+    "lodash": "4.17.21",
+    "meteor-node-stubs": "0.2.4",
+    "moment": "2.19.3",
+    "numeral": "2.0.4",
+    "papaparse": "4.1.1",
+    "save-as": "0.1.8",
+    "sequelize": "4.0.0",
+    "simpl-schema": "0.3.2",
+    "tedious": "1.14.0",
+    "written-number": "^0.8.1",
+    "xlsx": "0.9.13",
+    "xlsx-injector": "0.0.3"
+  }
+}

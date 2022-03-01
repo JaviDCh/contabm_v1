@@ -1,0 +1,330 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        Compañía seleccionada - Detalles
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form
+                    role="form"
+                    name="companiaSeleccionadaForm"
+                    novalidate
+                    style="margin-top: 15px; text-align: left; font-size: small; ">
+      
+                    <tabset>
+                        <tab heading="Generales">
+                            <div style="margin-left: 20px; margin-right: 20px; ">
+                                
+                                <div class="row row-centered" style="margin-top: 15px; ">
+                                    <!-- rif -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Rif</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.rif"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-centered">
+                                    </div>
+
+                                    <div class="col-sm-4 col-centered">
+                                    </div>
+                                </div>
+
+                                <div class="row row-centered">
+                                    <!-- nombre -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Nombre</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.nombre"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <!-- nombreCorto -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Nombre corto</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.nombreCorto"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <!-- abreviatura -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Abreviatura</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.abreviatura"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-centered">
+                                    <!-- direccion -->
+                                    <div class="col-sm-12 col-centered">
+                                        <div class="form-group">
+                                            <label>Dirección</label>
+                                            <textarea  rows="2"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.direccion"
+                                                    ng-change="setIsEdited()"
+                                                    ng-required="true"
+                                                    ng-model-options="{ updateOn: 'blur' }">
+                                        </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-centered">
+                                    <!-- telefono1 -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.telefono1"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <!-- telefono2 -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Teléfono</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.telefono2"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <!-- fax -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Fax</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.fax"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-centered">
+                                    <!-- ciudad -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Ciudad</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.ciudad"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <!-- estado (entidadFederal) -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Estado</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.entidadFederal"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <!-- zonaPostal -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Zona postal</label>
+                                            <input type="text"
+                                                    class="form-control"
+                                                    ng-model="companiaSeleccionada.zonaPostal"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-centered">
+                                    <!-- monedaDefecto -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Moneda (por defecto)</label>
+                                            <select class="form-control input-sm myinput-sm"
+                                                    ng-model="companiaSeleccionada.monedaDefecto"
+                                                    ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcioni'"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }">
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- suspendidoFlag -->
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <br />
+                                            <label>
+                                                <input type="checkbox"
+                                                        ng-model="companiaSeleccionada.suspendidoFlag"
+                                                        ng-change="setIsEdited()">
+                                                Suspendida?
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-centered">
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+                        <tab heading="Configuración para envío de e-mails">
+
+                            <div class="row row-centered" style="margin-top: 15px; ">
+                                <div class="col-sm-4 col-centered">
+                                </div>
+
+                                <!-- emailServerName -->
+                                <div class="col-sm-4 col-centered">
+                                    <div class="form-group">
+                                        <label>Nombre del servidor</label>
+                                        <input type="text"
+                                                class="form-control"
+                                                ng-model="companiaSeleccionada.emailServerName"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-centered">
+                                </div>
+                            </div>
+
+                            <div class="row row-centered">
+                                <div class="col-sm-4 col-centered">
+                                </div>
+
+                                <!-- emailServerPort -->
+                                <div class="col-sm-4 col-centered">
+                                    <div class="form-group">
+                                        <label>Número del puerto</label>
+                                        <input type="number"
+                                                class="form-control"
+                                                ng-model="companiaSeleccionada.emailServerPort"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-centered">
+                                </div>
+                            </div>
+
+                            <div class="row row-centered">
+                                <div class="col-sm-4 col-centered">
+                                </div>
+
+                                <!-- emailServerSSLFlag -->
+                                <div class="col-sm-4 col-centered">
+                                    <div class="form-group">
+                                        <br />
+                                        <label>
+                                            <input type="checkbox"
+                                                    ng-model="companiaSeleccionada.emailServerSSLFlag"
+                                                    ng-change="setIsEdited()">
+                                            SSL?
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-centered">
+                                </div>
+                            </div>
+
+                            <div class="row row-centered">
+                                <div class="col-sm-4 col-centered">
+                                </div>
+
+                                <!-- emailServerCredentialsUserName -->
+                                <div class="col-sm-4 col-centered">
+                                    <div class="form-group">
+                                        <label>Nombre del usuario</label>
+                                        <input type="text"
+                                                class="form-control"
+                                                ng-model="companiaSeleccionada.emailServerCredentialsUserName"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-centered">
+                                </div>
+                            </div>
+
+                            <div class="row row-centered">
+                                <div class="col-sm-4 col-centered">
+                                </div>
+
+                                <!-- emailServerCredentialsPassword -->
+                                <div class="col-sm-4 col-centered">
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="text"
+                                                class="form-control"
+                                                ng-model="companiaSeleccionada.emailServerCredentialsPassword"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-centered">
+                                </div>
+                            </div>
+
+                        </tab>
+                    </tabset>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 10px; min-width: 80px; ">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

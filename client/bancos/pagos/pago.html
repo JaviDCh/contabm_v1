@@ -1,0 +1,214 @@
+
+
+
+<div>
+
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-if="pago.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Pagos</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!pago.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Pagos</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion' && !vieneDeAfuera"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <li class="divider-vertical-small"></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node" ng-click="asociarFacturas()">Asociar facturas <span class="fa fa-desktop"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node" ng-click="revertirPago()">Revertir <span class="fa fa-undo"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                    <li><a href="#" ng-click="mostrarFacturasAsociadas()" class="navbar_custom_small_node">Mostrar facturas asociadas&nbsp;&nbsp;<span class="fa fa-desktop"></span></a></li>
+                    <li><a href="#" ng-click="movimientoBancario()" class="navbar_custom_small_node">Movimiento bancario&nbsp;&nbsp;<span class="fa fa-desktop"></span></a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-if="!vieneDeAfuera"><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                    <li ng-if="vieneDeAfuera"><a href="#" ng-click="windowClose()" class="navbar_custom_small_node_red">Cerrar <span class="fa fa-times-circle"></span></a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form role="form"
+                      name="pagosForm"
+                      novalidate
+                      style="margin-top: 5px; text-align: left; font-size: small; ">
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Compañía</label>
+                                  <select class="form-control"
+                                          ng-model="pago.proveedor"
+                                          ng-options="item.proveedor as item.nombre for item in proveedores | orderBy:'nombre'"
+                                          ng-change="setIsEdited('compania')"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                      </select>
+                              </div>
+                          </div>
+                          <div class="col-sm-1 col-centered">
+                          </div>
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Número</label>
+                                  <input type="text"
+                                         class="form-control"
+                                         ng-model="pago.numeroPago"
+                                         ng-change="setIsEdited()"
+                                         ng-model-options="{ updateOn: 'blur' }" />
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Fecha</label>
+                                  <input type="date"
+                                         class="form-control"
+                                         ng-model="pago.fecha"
+                                         ng-change="setIsEdited('desde')"
+                                         ng-required="true"
+                                         ng-model-options="{ updateOn: 'blur' }" />
+                              </div>
+                          </div>
+                          <div class="col-sm-1 col-centered">
+                          </div>
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Moneda</label>
+                                  <select class="form-control"
+                                          ng-model="pago.moneda"
+                                          ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                          ng-change="setIsEdited()"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Mi/Su</label>
+                                  <select class="form-control"
+                                          ng-model="pago.miSuFlag"
+                                          ng-options="item.miSu as item.descripcion for item in miSu_List | orderBy:'descripcion'"
+                                          ng-change="setIsEdited()"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                  </select>
+                              </div>
+                          </div>
+                          <div class="col-sm-1 col-centered">
+                          </div>
+                          <div class="col-sm-4 col-centered">
+                              <label>Monto</label>
+                              <input type="number"
+                                     class="form-control"
+                                     ng-model="pago.monto"
+                                     ng-change="setIsEdited('monto')"
+                                     ng-model-options="{ updateOn: 'blur' }" />
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <br />
+                              <label style="font-size: small; ">
+                                  <input type="checkbox"
+                                         ng-model="pago.anticipoFlag"
+                                         ng-change="setIsEdited()">
+                                  Anticipo
+                              </label>
+                          </div>
+                          <div class="col-sm-1 col-centered">
+                          </div>
+                          <div class="col-sm-4 col-centered">
+                          </div>
+                      </div>
+
+                      <br />
+
+                        <div class="row row-centered">
+                            <!-- observaciones -->
+                            <div class="col-sm-9 col-centered">
+                                <div class="form-group">
+                                    <label>Concepto</label>
+                                    <textarea class="form-control"
+                                           ng-model="pago.concepto"
+                                           ng-change="setIsEdited()"
+                                           ng-model-options="{ updateOn: 'blur' }"
+                                           rows="2"
+                                           ng-required="true">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <div class="col-sm-4 col-centered">
+                            </div>
+                            <div class="col-sm-1 col-centered">
+                            </div>
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Cia Contab</label>
+                                    <p class="form-control-static">{{ companiaSeleccionada.nombre }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <div class="col-sm-9 col-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; ">
+                                <!-- ingreso, ult actualización y usuario  -->
+                                <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Ingreso: </label>
+                                    <br />
+                                    <span>{{ pago.ingreso | date:'dd-MM-yyyy hh:mm a'}} </span>
+                                </div>
+                                <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Ult act: </label>
+                                    <br />
+                                    <span>{{ pago.ultAct | date:'dd-MM-yyyy hh:mm a'}} </span>
+                                </div>
+                                <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Usuario: </label>
+                                    <br />
+                                    <span>{{ pago.usuario }} </span>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

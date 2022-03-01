@@ -1,0 +1,51 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Vacaciones - Calcular</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+
+                <div class="col-sm-4" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombreCorto }}</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row row-centered">
+            <div class="col-sm-7 col-centered" style="font-size: small; ">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox"
+                                   ng-model="mantenerValoresCalculadosAntes">
+                            Mantener valores previamente calculados
+                        </label>
+                    </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button ng-click="calcularVacaciones()" class="btn btn-sm btn-primary" style="min-width: 80px; ">Calcular</button>
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; min-width: 80px; ">Cerrar</button>
+</div>

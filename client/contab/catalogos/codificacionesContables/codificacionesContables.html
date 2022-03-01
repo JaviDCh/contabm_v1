@@ -1,0 +1,207 @@
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+        <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+        <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        <li ng-if="algunItemEditado()"><a href="#" class="navbar_custom_small_header"><em>Codificaciones contables diferentes (Condi)</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                        <li ng-if="!algunItemEditado()"><a href="#" class="navbar_custom_small_header"><em>Codificaciones contables diferentes (Condi)</em></a></li>
+
+                        <li><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+
+                        <li class="divider-vertical-small"></li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Copiar <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#" ng-click="exportToFile()" class="navbar_custom_small_node">Exportar&nbsp;&nbsp;<span class="fa fa-share"></span></a></li>
+                                <li><a href="#" ng-click="importFromFile()" class="navbar_custom_small_node">Importar&nbsp;&nbsp;<span class="fa fa-reply"></span></a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#" ng-click="importarDesdeContab()" class="navbar_custom_small_node">Importar desde Contab&nbsp;&nbsp;</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<input type="file"
+       id = "fileInput"
+       accept = ".txt"
+       multiple = "false"
+       onchange = "angular.element(this).scope().uploadFile(this.files)"
+       ng-show="false">
+
+
+<!-- este input es temporal; solo  para importar en Lockton; luego, eliminr ...  -->
+<input type="file"
+      id = "fileInput2"
+      accept = ".txt"
+      multiple = "false"
+      onchange = "angular.element(this).scope().uploadFile2(this.files)"
+      ng-show="false">
+
+
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+        <tabset>
+
+            <tab heading="Codificaciones contables">
+
+                <div class="col-sm-5 col-sm-offset-0">
+                    <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="#" class="navbar_custom_small_header">Codificaciones contables </a></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="agregarCodificacion()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div ui-grid="codificaciones_ui_grid"
+                        ui-grid-edit
+                        ui-grid-cellnav
+                        ui-grid-resize-columns
+                        ui-grid-selection
+                        class="angularGrid"
+                        style="height: 250px; width: 100%; ">
+                    </div>
+                </div>
+
+                <div class="col-sm-7 col-sm-offset-0">
+                    <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="#" class="navbar_custom_small_header">Códigos contables </a></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground"
+                                           ng-click="agregarCodigo()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div ui-grid="codigos_ui_grid"
+                        ui-grid-edit
+                        ui-grid-cellnav
+                        ui-grid-resize-columns
+                        ui-grid-selection
+                        class="angularGrid"
+                        style="height: 250px; width: 100%; ">
+                    </div>
+                </div>
+
+            </tab>
+
+            <tab heading="Definición de la codificación seleccionada">
+
+                <div class="col-sm-12 col-sm-offset-0" style="margin-top: 15px; text-align: left; margin-left: 20px; color: blue; ">
+                    {{ codificacionSeleccionada && codificacionSeleccionada.descripcion ?
+                       'Códigos contables de tipo detalle para la codificación contable: ' + codificacionSeleccionada.descripcion : ''}}
+                </div>
+
+                <div class="col-sm-12 col-sm-offset-0">
+
+                    <div class="col-sm-4 col-sm-offset-0">
+                        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li><a href="#" class="navbar_custom_small_header">Códigos contables </a></li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </nav>
+
+                        <div ui-grid="codigos_ui_grid2"
+                            ui-grid-resize-columns
+                            ui-grid-selection
+                            class="angularGrid"
+                            style="height: 250px; width: 100%; ">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 col-sm-offset-0">
+
+                        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li><a href="#" class="navbar_custom_small_header">Cuentas asociadas</a></li>
+                                        <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevo()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </nav>
+
+                        <div ui-grid="codigosCuentasContables_ui_grid"
+                             ui-grid-resize-columns
+                             class="angularGrid"
+                             style="height: 250px; width: 100%; ">
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-5 col-sm-offset-0">
+
+                        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-collapse collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li><a href="#" class="navbar_custom_small_header">Cuentas contables </a></li>
+                                        <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevo()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </nav>
+
+                        <div ui-grid="cuentasContables_ui_grid"
+                             ui-grid-resize-columns
+                             ui-grid-selection
+                             class="angularGrid"
+                             style="height: 250px; width: 100%; ">
+                        </div>
+
+                    </div>
+                </div>
+
+            </tab>
+
+        </tabset>
+    </div>
+</div>

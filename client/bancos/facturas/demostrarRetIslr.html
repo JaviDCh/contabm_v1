@@ -1,0 +1,219 @@
+
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        Facturas - Demostración del cálculo de la retención Islr
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+                <span style="color: dodgerblue">{{ companiaContabSeleccionada.nombre }}</span>
+                &nbsp;&nbsp;
+                <i style="color: #428BCA" class="fa fa-info-circle fa-1x" ng-click="showInfoAboutThisPage()"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-9 col-centered">
+        <span style="color: #004776; font-size: small; ">Determinado por el programa: </span>
+        <hr style="margin-top: 0; " class="blueLine">
+    </div>
+</div>
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Fecha</label><br />
+            <span>
+                {{ unidadTributaria.fecha | date : "dd-MMM-yyyy" }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Unidad tributaria</label><br />
+            <span>
+                {{ unidadTributaria.monto | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>factor</label><br />
+            <span>
+                {{ unidadTributaria.factor | currency : "" : 6 }}
+            </span>
+        </div>
+    </div>
+</div> 
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Base imponible</label><br />
+            <span>
+                {{ baseRetIslr | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Retención (%)</label><br />
+            <span>
+                {{ categoriaRetencion.porcentajeRetencion | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>A partir de</label><br />
+            <span>
+                {{ aPartirDe | currency : "" : 2 }} ({{ mensajeAPartirDe }}) 
+            </span>
+        </div>
+    </div>
+</div> 
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Base imponible</label><br />
+            <span>
+                {{ baseRetIslr | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Retención (%)</label><br />
+            <span>
+                {{ categoriaRetencion.porcentajeRetencion | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Retención (antes sust)</label><br />
+            <span>
+                {{ montoAntesSustraendo | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+</div> 
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-3 col-centered">
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Sustraendo</label><br />
+            <span ng-if="sustraendoAplica">
+                {{ sustraendo | currency : "" : 2 }} (U.T. x %Ret x factor)  
+            </span>
+            <span ng-if="!sustraendoAplica">
+                {{ sustraendo | currency : "" : 2 }} (no aplica)  
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Retención</label><br />
+            <span>
+                {{ retencionFinal | currency : "" : 2 }} 
+            </span>
+        </div>
+    </div>
+</div> 
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-9 col-centered">
+        <span style="color: #004776; font-size: small; ">Registrado por el usuario </span>
+        <hr style="margin-top: 0; " class="blueLine">
+    </div>
+</div>
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Base</label>
+            <br />
+            <span>
+                {{ retencionIslr.montoBase | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label style="font-style: bold; ">%</label>
+            <br />
+            <span>
+                {{ retencionIslr.porcentaje | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Retención</label>
+            <br />
+            <span>
+                {{ retencionIslr.montoAntesSustraendo | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row row-centered" style="font-size: small; ">
+    <div class="col-sm-3 col-centered">
+    </div> 
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Sustraendo</label>
+            <br />
+            <span>
+                {{ retencionIslr.sustraendo ? retencionIslr.sustraendo : 0 | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-3 col-centered">
+        <div class="form-group">
+            <label>Retención final</label>
+            <br />
+            <span>
+                {{ retencionIslr.monto | currency : "" : 2 }}
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <!-- <button type="submit" form="exportarAsientosContablesForm" class="btn btn-sm btn-primary" style="margin-right: 15px; min-width: 80px; ">Ok</button> -->
+                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 10px; min-width: 80px; ">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

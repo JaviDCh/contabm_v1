@@ -1,0 +1,209 @@
+
+
+<div class="row">
+    <div class="col-sm-2 col-sm-offset-1" style="text-align: left; ">
+        <a data-toggle="collapse"
+           href="#collapseFiltro"
+           id="collapseLink">
+           Filtro ... <span class="fa fa-filter"></span>
+        </a>
+    </div>
+    <div class="col-sm-2 col-sm-offset-1" style="text-align: left; ">
+    </div>
+    <div class="col-sm-6 col-sm-offset-0" style="text-align: left; ">
+        <div style="text-align: right; font-style: italic; ">
+            <span style="color: dodgerblue">{{ companiaSeleccionada.nombreCorto }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="collapse" id="collapseFiltro">
+  <div class="well">
+
+      <div class="row">
+          <form role="form" novalidate style="margin-top: 15px; ">
+
+              <div class="container-fluid">
+
+                  <div class="row">
+                      <!-- Nombre -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Empleado: </label>
+                          <input type="text"
+                                 style="width: 100%; "
+                                 class="myinput-xsm"
+                                 ng-model="filtro.nombreEmpleado"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+
+                      <!-- rubro - abreviatura -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Abreviatura: </label>
+                          <input type="text"
+                                 style="width: 100%; "
+                                 class="myinput-xsm"
+                                 ng-model="filtro.rubroAbreviatura"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+
+                      <!-- rubro - descripción  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Descripción: </label>
+                          <input type="text"
+                                 style="width: 100%; "
+                                 class="myinput-xsm"
+                                 ng-model="filtro.rubroDescripcion"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+
+                      <!-- tipo de nómina  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Tipo nóm: </label>
+                          <input type="text"
+                                 style="width: 100%; "
+                                 class="myinput-xsm"
+                                 ng-model="filtro.tipoNomina"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+
+                      <!-- suspendidoFlag  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Suspendido: </label><br />
+                          <input type="checkbox"
+                                 class="myinput-xsm"
+                                 ng-model="filtro.suspendido" />
+                      </div>
+
+                      <!-- salario  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Salario: </label><br />
+                          <input type="checkbox"
+                                 class="myinput-xsm"
+                                 ng-model="filtro.salario" />
+                      </div>
+
+                      <!-- siempre  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Siempre: </label><br />
+                          <input type="checkbox"
+                                 class="myinput-xsm"
+                                 ng-model="filtro.siempre" />
+                      </div>
+
+                      <!-- periodicidad (1q, 2q, s)  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Periodicidad: </label>
+                          <select class="myinput-xsm"
+                                  style="width: 100%; "
+                                  ng-model="filtro.periodicidad"
+                                  ng-options="item.periodicidad as item.descripcion for item in periodicidadArray | orderBy:'descripcion'"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+
+                      <!-- tipo (asignación/deducción)  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Tipo: </label><br />
+                          <select class="myinput-xsm"
+                                  style="width: 100%; "
+                                  ng-model="filtro.tipo"
+                                  ng-options="item.tipo as item.descripcion for item in tiposArray | orderBy:'descripcion'"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+
+                      <!-- monto (desde)  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Monto (1): </label>
+                          <input type="number"
+                                 style="width: 100%; "
+                                 class="myinput-xsm"
+                                 ng-model="filtro.monto1"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+
+                      <!-- monto (desde)  -->
+                      <div class="col-sm-1 col-sm-offset-0">
+                          <label class="myinput-xsm">Monto (2): </label>
+                          <input type="number"
+                                 style="width: 100%; "
+                                 class="myinput-xsm"
+                                 ng-model="filtro.monto2"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+
+
+                  </div>
+
+              </div>
+          </form>
+      </div>
+
+      <div class="row">
+          <hr class="blueLine" />
+
+          <a href="#" ng-click="limpiarFiltro()" class="btn btn-link btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+              Limpiar filtro <span class="fa fa-eraser"></span>
+          </a>
+
+          <a href="#" ng-click="aplicarFiltro()" class="btn btn-link btn-sm pull-right" style="min-width: 80px; margin-right: 30px; ">
+              Aplicar filtro <span class="fa fa-arrow-down"></span>
+          </a>
+      </div>
+  </div>
+</div>
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+
+        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a class="navbar_custom_small_header">Rubros asignados</a></li>
+                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevo()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#" ng-click="leerMasRegistros()" class="navbar_custom_small_node_withBackground">Más ...</a></li>
+                        <li><a href="#" ng-click="leerTodosLosRegistros()" class="navbar_custom_small_node_withBackground">Todo</a></li>
+                        <!-- <li class="divider-vertical-small"></li>
+                        <li><a href="#" ng-click="regresar()" class="navbar_custom_small_node_withBackground">Regresar ...</a></li> -->
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+
+        <div ui-grid="rubros_ui_grid"
+             ui-grid-edit
+             ui-grid-cellnav
+             ui-grid-resize-columns
+             ui-grid-selection
+             ui-grid-pinning
+             class="angularGrid"
+             style="height: 250px; width: 100%; ">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,481 @@
+
+
+<div>
+
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li ng-if="factura.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Facturas</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!factura.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Facturas</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion' && !vieneDeAfuera"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <!-- opción para anular o revertir anulación; solo para facturas pendientes o que ya están anuladas; mostramos Anular
+                    para facturas pendientes; mostramos Revertir anulación para facturas anuladas ...  -->
+                    <li ng-if="origen == 'edicion' && !vieneDeAfuera && (factura.estado === 1 || factura.estado === 4)" class="divider-vertical-small"></li>
+                    <li ng-if="origen == 'edicion' && !vieneDeAfuera && (factura.estado === 1)"><a href="#" ng-click="anularRevertirAnulacion()" class="navbar_custom_small_node">Anular&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+                    <li ng-if="origen == 'edicion' && !vieneDeAfuera && (factura.estado === 4)"><a href="#" ng-click="anularRevertirAnulacion()" class="navbar_custom_small_node">Revertir anulación&nbsp;&nbsp;<span class="fa fa-undo"></span></a></li>
+
+                    <li class="divider-vertical-small"></li>
+                    <li><a href="#" class="navbar_custom_small_node" ng-click="mostrarCuotas()">Mostrar cuotas <span class="fa fa-desktop"></span></a></li>
+                    <li><a href="#" ng-click="mostrarPagosAsociados()" class="navbar_custom_small_node">Mostrar pago <span class="fa fa-desktop"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                    <li><a href="#" ng-click="asientoContable()" class="navbar_custom_small_node">Asiento contable <span class="fa fa-desktop"></span></a></li>
+
+                    <li class="divider-vertical-small"></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Varios <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="exportarAMicrosoftWord()" class="navbar_custom_small_node">Exportar a Microsoft Word&nbsp;&nbsp;<span class="fa fa-file-word-o"></span></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-if="!vieneDeAfuera"><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                    <li ng-if="vieneDeAfuera"><a href="#" ng-click="windowClose()" class="navbar_custom_small_node_red">Cerrar <span class="fa fa-times-circle"></span></a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form role="form"
+                      name="facturasForm"
+                      novalidate
+                      style="margin-top: 5px; text-align: left; font-size: small; ">
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Compañía</label>
+                                  <select class="form-control input-sm myinput-sm"
+                                          ng-model="factura.proveedor"
+                                          ng-options="item.proveedor as item.nombre for item in proveedores | orderBy:'nombre'"
+                                          ng-change="setIsEdited('compania')"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                      </select>
+                              </div>
+                          </div>
+
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Número factura</label>
+                                  <input type="text"
+                                         class="form-control input-sm"
+                                         ng-model="factura.numeroFactura"
+                                         ng-change="setIsEdited()"
+                                         ng-model-options="{ updateOn: 'blur' }" />
+                              </div>
+                          </div>
+
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Número control</label>
+                                  <input type="text"
+                                         class="form-control input-sm"
+                                         ng-model="factura.numeroControl"
+                                         ng-change="setIsEdited()"
+                                         ng-model-options="{ updateOn: 'blur' }" />
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Fecha emisión</label>
+                                  <input type="date"
+                                         class="form-control input-sm"
+                                         ng-model="factura.fechaEmision"
+                                         ng-change="setIsEdited('desde')"
+                                         ng-required="true"
+                                         ng-model-options="{ updateOn: 'blur' }" />
+                              </div>
+                          </div>
+
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Fecha recepción</label>
+                                  <input type="date"
+                                         class="form-control input-sm"
+                                         ng-model="factura.fechaRecepcion"
+                                         ng-change="setIsEdited('desde')"
+                                         ng-required="true"
+                                         ng-model-options="{ updateOn: 'blur' }" />
+                              </div>
+                          </div>
+
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Moneda</label>
+                                  <select class="form-control input-sm myinput-sm"
+                                          ng-model="factura.moneda"
+                                          ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                          ng-change="setIsEdited()"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Forma de pago</label>
+                                  <select class="form-control input-sm myinput-sm"
+                                          ng-model="factura.condicionesDePago"
+                                          ng-options="item.formaDePago as item.descripcion for item in formasDePago | orderBy:'descripcion'"
+                                          ng-change="setIsEdited()"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                  </select>
+                              </div>
+                          </div>
+
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>Tipo de servicio</label>
+                                  <select class="form-control input-sm myinput-sm"
+                                          ng-model="factura.tipo"
+                                          ng-options="item.tipo as item.descripcion for item in tiposProveedor | orderBy:'descripcion'"
+                                          ng-change="setIsEdited()"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                  </select>
+                              </div>
+                          </div>
+
+                          <div class="col-sm-4 col-centered">
+                              <div class="form-group">
+                                  <label>CxC/CxP</label>
+                                  <select class="form-control input-sm myinput-sm"
+                                          ng-model="factura.cxCCxPFlag"
+                                          ng-options="item.tipo as item.descripcion for item in cxcCxPList | orderBy:'descripcion'"
+                                          ng-change="setIsEdited()"
+                                          ng-model-options="{ updateOn: 'blur' }">
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row">
+                          <div class="col-sm-4">
+                              <fieldset class="scheduler-border" style="text-align: left; ">
+                                  <legend class="scheduler-border">nc/nd: </legend>
+
+                                  <div class="form-group">
+                                      <label></label>
+                                      <select class="form-control input-sm myinput-sm"
+                                              ng-model="factura.ncNdFlag"
+                                              ng-options="item.tipo as item.descripcion for item in ncNdList | orderBy:'descripcion'"
+                                              ng-change="setIsEdited()"
+                                              ng-model-options="{ updateOn: 'blur' }">
+                                      </select>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <label>Factura afectada</label>
+                                      <input type="text"
+                                             class="form-control input-sm"
+                                             ng-model="factura.numeroFacturaAfectada"
+                                             ng-change="setIsEdited()"
+                                             ng-model-options="{ updateOn: 'blur' }" />
+                                  </div>
+
+                              </fieldset>
+                          </div>
+
+                          <div class="col-sm-4">
+                              <fieldset class="scheduler-border" style="text-align: left; ">
+                                  <legend class="scheduler-border">Importación: </legend>
+
+                                  <div class="col-sm-1">
+                                      <br />
+                                      <label style="font-weight: normal; "><input type="checkbox" ng-model="factura.importacionFlag"> </label>
+                                  </div>
+
+                                  <div class="col-sm-10">
+                                      <div class="form-group">
+                                          <label>#Planilla importación</label>
+                                          <input type="text"
+                                                 class="form-control input-sm"
+                                                 ng-model="factura.numeroPlanillaImportacion"
+                                                 ng-change="setIsEdited()"
+                                                 ng-model-options="{ updateOn: 'blur' }" />
+                                      </div>
+                                  </div>
+
+                              </fieldset>
+                          </div>
+
+                          <div class="col-sm-4">
+                              <fieldset class="scheduler-border" style="text-align: left; ">
+                                  <legend class="scheduler-border">Comprobante seniat: </legend>
+
+                                  <div class="col-sm-8">
+                                      <div class="form-group">
+                                          <label></label>
+                                          <input type="text"
+                                                 class="form-control input-sm"
+                                                 ng-model="factura.numeroComprobante"
+                                                 ng-change="setIsEdited()"
+                                                 ng-model-options="{ updateOn: 'blur' }" />
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group">
+                                          <label></label>
+                                          <input type="number"
+                                                 class="form-control input-sm"
+                                                 ng-model="factura.numeroOperacion"
+                                                 ng-change="setIsEdited()"
+                                                 ng-model-options="{ updateOn: 'blur' }" />
+                                      </div>
+                                  </div>
+
+                                  <br>
+                                  <div class="col-sm-12">
+                                      <label style="font-weight: normal; "><input type="checkbox" ng-model="factura.comprobanteSeniat_UsarUnoExistente_Flag"> Mismo proveedor y mes: agregar al último</label><br>
+                                  </div>
+
+                              </fieldset>
+                          </div>
+                      </div>
+
+                        <div class="row row-centered">
+                            <!-- observaciones -->
+                            <div class="col-sm-10 col-centered">
+                                <div class="form-group">
+                                    <label>Concepto</label>
+                                    <textarea class="form-control input-sm"
+                                           ng-model="factura.concepto"
+                                           ng-change="setIsEdited()"
+                                           ng-model-options="{ updateOn: 'blur' }"
+                                           rows="2"
+                                           ng-required="true">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Monto no imponible</label>
+                                    <input type="number"
+                                           class="form-control input-sm"
+                                           ng-model="factura.montoFacturaSinIva"
+                                           ng-change="setIsEdited('montoFacturaSinIva')"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Monto imponible</label>
+                                    <input type="number"
+                                           class="form-control input-sm"
+                                           ng-model="factura.montoFacturaConIva"
+                                           ng-change="setIsEdited('montoFacturaConIva')"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-centered">
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 20px; margin-bottom: 20px; ">
+                            <div class="col-sm-12 col-sm-offset-0">
+
+                                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                                    <div class="container-fluid">
+                                        <div class="navbar-collapse collapse">
+                                            <ul class="nav navbar-nav">
+                                                <li ng-if="origen == 'edicion'"><a class="navbar_custom_small_header"></a></li>
+                                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="determinarImpuestosRetenciones()">Determinar <span class="fa fa-gears"></span></a></li>
+                                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="calcularFactura()">Calcular <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+                                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="redondearFactura()">Redondear <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+
+                                                <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoImpuestosRetenciones()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                                
+                                                <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="demostrarRetIslr()" popover="Click para revisar cómo el programa determina la retención de Islr." popover-trigger="mouseenter">Ret Islr <span class="fa fa-desktop"></span></a></li>
+
+                                                <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="grabarFechasRecepcionPlanillasRetencionImpuesto()" popover="Click para grabar (solo!) las fechas de recepción de planillas de retención de impuestos." popover-trigger="mouseenter">Grabar <span class="fa fa-save"></span></a></li>
+
+                                                <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="generarAsientoContableRetencionesImpuesto()" popover="Click para generar asientos contables para retenciones de impuesto (Iva/Islr)." popover-trigger="mouseenter">Asientos contables de retenciones <span class="fa fa-gears"></span></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </nav>
+
+                                <div ui-grid="impuestosRetenciones_ui_grid"
+                                     ui-grid-edit
+                                     ui-grid-cellnav
+                                     ui-grid-resize-columns
+                                     ui-grid-selection
+                                     class="angularGrid"
+                                     style="width: 100%; height: 200px; ">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; ">
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Monto: </label>
+                                <br />
+                                <span>{{ factura.montoFactura ? factura.montoFactura : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Iva: </label>
+                                <br />
+                                <span>{{ factura.iva ? factura.iva : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Otros imp: </label>
+                                <br />
+                                <span>{{ factura.otrosImpuestos ? factura.otrosImpuestos : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Total: </label>
+                                <br />
+                                <span>{{ factura.totalFactura ? factura.totalFactura : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Ret iva: </label>
+                                <br />
+                                <span>{{ factura.retencionSobreIva ? factura.retencionSobreIva : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Ret islr: </label>
+                                <br />
+                                <span>{{ factura.impuestoRetenido ? factura.impuestoRetenido : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Otras ret: </label>
+                                <br />
+                                <span>{{ factura.otrasRetenciones ? factura.otrasRetenciones : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Total a pagar: </label>
+                                <br />
+                                <span>{{ factura.totalAPagar ? factura.totalAPagar : 0 | currency : "" : 4 }} </span>
+                            </div>
+                            <div class="col-sm-1 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Saldo: </label>
+                                <br />
+                                <span>{{ factura.saldo ? factura.saldo : 0 | currency : "" : 4 }} </span>
+                            </div>
+                        </div>
+
+
+                        <div class="row row-centered" style="margin-top: 20px; ">
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Anticipo</label>
+                                    <input type="number"
+                                           class="form-control input-sm"
+                                           ng-model="factura.anticipo"
+                                           ng-change="setIsEdited()"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Número de lote</label>
+                                    <p class="form-control-static">{{ factura.lote ? factura.lote : "&nbsp;&nbsp;" }}</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Estado</label>
+                                    <p class="form-control-static"
+
+                                       ng-class="{ 'blue': factura.estado === 3,
+                                                   'red': (factura.estado === 1 || factura.estado === 2),
+                                                   'green': factura.estado === 4 }"
+                                    >
+                                        {{ factura.estado | nombreEstadoFactura }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <div class="col-sm-4 col-centered">
+                            </div>
+
+                            <div class="col-sm-4 col-centered">
+                            </div>
+
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label>Cia Contab</label>
+                                    <p class="form-control-static">{{ companiaSeleccionada._id | empresaUsuariaSeleccionadaFilter }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <div class="col-sm-10 col-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; ">
+                                <!-- ingreso, ult actualización y usuario  -->
+                                <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Ingreso: </label>
+                                    <br />
+                                    <span>{{ factura.ingreso | date:'dd-MM-yyyy hh:mm a'}} </span>
+                                </div>
+                                <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Ult act: </label>
+                                    <br />
+                                    <span>{{ factura.ultAct | date:'dd-MM-yyyy hh:mm a'}} </span>
+                                </div>
+                                <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                    <label style="font-size: x-small; ">Usuario: </label>
+                                    <br />
+                                    <span>{{ factura.usuario }} </span>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>

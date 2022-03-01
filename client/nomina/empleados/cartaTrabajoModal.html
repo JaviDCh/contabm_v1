@@ -1,0 +1,77 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Archivos (plantillas) registrados</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+
+                <div class="col-sm-4" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                  <table style="font-size: x-small; " class="table table-condensed table-striped table-bordered table-hover table-responsive">
+                      <thead>
+                          <tr>
+                              <th style="text-align: left; ">tipo</th>
+                              <th style="text-align: left; ">aplicación</th>
+                              <th style="text-align: left; ">nombre</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="file in template_files">
+                              <td style="text-align: left; ">{{ file.metadata.tipo }}</td>
+                              <td style="text-align: left; ">{{ file.metadata.aplicacion }}</td>
+                              <td style="text-align: left; ">
+                                  <a href="#" ng-click="obtenerCartaTrabajo(file)">{{ file.original.name }}</a>
+                              </td>
+                          </tr>
+                      </tbody>
+                      <tfoot>
+                      </tfoot>
+                  </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <ol>
+                    <li>Haga un <em>click</em> en el nombre del archivo, para seleccionar la plantilla que desee usar</li>
+                    <li>Espere que el proceso que genera el documento temine</li>
+                    <li>Haga un <em>click</em> en el <em>link</em> que se mostrará abajo, para obtener el documento (download)</li>
+
+                    <li ng-if="downLoadWordDocument">
+                        <a href="{{downLoadLink}}" target="_self" download>{{ selectedFile.original.name }}</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <!-- <button ng-click="ok()" class="btn btn-sm btn-primary">OK</button> -->
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; ">Cerrar</button>
+</div>

@@ -1,0 +1,101 @@
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: right; font-style: italic; ">
+        <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <h4 style="font-style: italic; ">Contab - Ultimo mes cerrado</h4>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <div class="col-sm-3 col-sm-offset-3" style="font-size: small; ">
+            <div class="form-group" style="text-align: left; ">
+                <label for="codigo">Mes</label>
+                <input type="text"
+                    class="form-control"
+                    ng-model="ultimoMesCerrado.mes2"
+                    disabled />
+            </div>
+        </div>
+
+        <div class="col-sm-3 col-sm-offset-0" style="font-size: small; ">
+            <div class="form-group" style="text-align: left; ">
+                <label for="codigo">Año</label>
+                <input type="text"
+                    class="form-control"
+                    ng-model="ultimoMesCerrado.ano"
+                    disabled />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <div class="col-sm-3 col-sm-offset-3" style="font-size: small; ">
+            <div class="form-group" style="text-align: left; ">
+                <label for="codigo">El</label>
+                <input type="text"
+                    class="form-control"
+                    ng-model="ultimoMesCerrado.ultAct2"
+                    disabled />
+            </div>
+        </div>
+
+        <div class="col-sm-3 col-sm-offset-0" style="font-size: small; ">
+            <div class="form-group" style="text-align: left; ">
+                <label for="codigo">Por</label>
+                <input type="text"
+                    class="form-control"
+                    ng-model="ultimoMesCerrado.usuario"
+                    disabled />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <div class="col-sm-3 col-sm-offset-3" style="font-size: small; ">
+            <div class="form-group" style="text-align: left; ">
+                <label for="codigo">En forma</label>
+                <input type="text"
+                    class="form-control"
+                    ng-model="ultimoMesCerrado.manAuto2"
+                    disabled />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" ng-if="userHasRole(['contab_cierres'])">
+        <a href="#" ng-click="cambiarUltimoMesCerrado()"
+                    class="btn btn-primary btn-sm pull-right"
+                    style="min-width: 80px; margin-left: 120px; ">
+            Cambiar
+        </a>
+    </div>
+</div>

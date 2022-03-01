@@ -1,0 +1,109 @@
+﻿
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+        <!--    <h4 class="generaSimplelTitle">Empresas usuarias</h4>-->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-20" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-20">
+        <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        <li><a href="#" class="navbar_custom_small_header" ng-if="usuariosEditados()"><em>Usuarios y compañías</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                        <li><a href="#" class="navbar_custom_small_header" ng-if="!usuariosEditados()"><em>Usuarios y compañías</em></a></li>
+
+                        <li><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-20">
+
+        <div class="col-sm-4 col-sm-offset-0">
+            <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#" class="navbar_custom_small_header">Usuarios</a></li>
+                            <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+
+            <div ui-grid="usuarios_ui_grid"
+                 ui-grid-resize-columns
+                 ui-grid-selection
+                 class="angularGrid"
+                 style="height: 250px; width: 100%; ">
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-sm-offset-0">
+            <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#" class="navbar_custom_small_header">Usuarios y compañías</a></li>
+                            <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> -->
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+
+            <div ui-grid="usuariosCompanias_ui_grid"
+                 ui-grid-resize-columns
+                 ui-grid-selection
+                 class="angularGrid"
+                 style="height: 250px; width: 100%; ">
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-sm-offset-0">
+            <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#" class="navbar_custom_small_header">Compañías</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+
+            <div ui-grid="companias_ui_grid"
+                 ui-grid-resize-columns
+                 ui-grid-selection
+                 class="angularGrid"
+                 style="height: 250px; width: 100%; ">
+            </div>
+        </div>
+
+    </div>
+</div>

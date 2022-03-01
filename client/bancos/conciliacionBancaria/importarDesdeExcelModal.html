@@ -1,0 +1,138 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Importar movimientos bancarios del banco desde Excel</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-6 col-sm-offset-6" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                <div ng-show="showProgress">
+                    <span style="font-size: small; font-weight: bold; ">
+                        ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+
+                <tabset style="text-align: left; ">
+                    <tab heading="Importar movimientos">
+                        <br />
+                        <p>
+                            Esta función le permite registrar los movimientos bancarios recibidos desde el banco,
+                            para que puedan ser comparados con los movimientos bancarios propios.
+                        </p>
+
+                        <form id="form.tratarFilesForm"
+                                name="form.tratarFilesForm"
+                                role="form"
+                                novalidate
+                                style="margin-top: 15px; "
+                                ng-submit="submit_TratarFilesForm()" >
+
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-0">
+                                            <div class="form-group form-group-sm">
+                                                <label  for="fileInputControl" class="control-label input-label pull-left">&nbsp;&nbsp;</label>
+                                                <br />
+                                                <input type="file"
+                                                       id="fileInputControl"
+                                                       name="fileInputControl"
+                                                       accept=".xlsx"
+                                                       onchange="angular.element(this).scope().uploadFile(this.files)" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div>
+                                <button ng-click="registrarMovimientosBanco()" class="btn btn-sm btn-primary pull-right" style="margin-right: 15px; min-width: 80px; ">3) Registrar movimientos del banco</button>
+                                <button type="submit" class="btn btn-sm btn-primary pull-right" form="form.tratarFilesForm" style="margin-right: 15px; min-width: 80px; ">2) Leer el documento Excel indicado</button>
+                            </div>
+                    </tab>
+                    <tab heading="Notas">
+
+                        <div style="margin: 30px; ">
+                            <p>
+                                El <em>documento Excel</em> que Ud. proporcione, debe contener una linea para cada movimiento
+                                bancario registrado por el banco.
+                            </p>
+                            <p>
+                                La 1ra. linea del documento debe correponder a los <em>encabezados</em> de columna. En particular,
+                                las columnas que pueden estar presenten son:
+                            </p>
+                            <p>
+                                <ul>
+                                    <li><em><b>número</b></em> (opcional - número del cheque, depósito, transferencia, etc.)</li>
+                                    <li><em><b>tipo</b></em> (opcional - tipo del movimiento bancario: CH, DP, TR, etc.)</li>
+                                    <li><em><b>fecha</b></em> (fecha del movimiento bancario. Debe venir a menos que venga un
+                                        <em><b>día</b></em>)</li>
+                                    <li><em><b>beneficiario</b></em> (opcional - beneficiario del movimiento bancario)</li>
+                                    <li><em><b>concepto</b></em> (opcional - concepto del movimiento bancario)</li>
+                                    <li><em><b>monto</b></em> (monto (positivo o negativo) del movimiento bancario. Debe venir a
+                                        menos que vengan <em><b>débitos</b></em>/<em><b>créditos</b></em>)</li>
+                                </ul>
+                            </p>
+                            <p>
+                                Si el documento Excel no contiene una columna <em><b>fecha</b></em>, puede contener una columna <em><b>día</b></em>.
+                                En un caso tal, esta función intentará construír una fecha usando el día indicado.
+                                <ul>
+                                    <li><em><b>día</b></em> (usado para construir la <em><b>fecha</b></em>, si no viene una)</li>
+                                </ul>
+                            </p>
+                            <p>
+                                Si el documento Excel no contiene una columna <em><b>monto</b></em>, puede contener columnas
+                                <em><b>créditos</b></em> y <em><b>débitos</b></em>.
+                                En un caso tal, esta función intentará construír el monto usando las columnas débitos/créditos indicados.
+                                <ul>
+                                    <li><em><b>créditos</b></em> (usado para construir el <em><b>monto</b></em>, si no viene uno)</li>
+                                    <li><em><b>débitos</b></em> (usado para construir el <em><b>monto</b></em>, si no viene uno)</li>
+                                </ul>
+                            </p>
+                            <p>
+                                <b>Nota importante (1):</b> el monto debe siempre venir así: 1000,75; o así: 1.000,75. Pero no así: 100.75; o así: 1,000.99 <br />
+                                <b>Nota importante (2):</b> los encabezados de columna en el documento Excel deben venir escritos
+                                <em><b>en forma exacta</b></em> a como se indica arriba; de otra forma, serán ignorados por esta función.
+                            </p>
+                            <b>El monto, o débito, puede traer un guión que indique que es negativo; debemos dejarlo allí.</b>
+                        <div />
+
+                    </tab>
+                </tabset>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <!-- <button type="submit" class="btn btn-sm btn-primary" form="tratarFilesForm" style="min-width: 80px; ">2) Leer el documento Excel indicado</button>
+    <button ng-click="registrarMovimientosBanco()" class="btn btn-sm btn-primary" style="min-width: 80px; ">3) Registrar movimientos del banco</button> -->
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; min-width: 80px; ">Cerrar</button>
+</div>

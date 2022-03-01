@@ -1,0 +1,163 @@
+
+body {
+    padding-top: 70px;     /* the navbar (fixed-top) hides part of the body; this is a solutions proposed by bootstrap */
+    margin-bottom: 60px;   /* Margin bottom by footer height */
+}
+
+#footer > .container {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+nav {
+    padding-right: 25px;
+    padding-left: 25px;
+}
+
+/* ng-grid */
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 100%;
+    height: 300px;
+    font-size: 12px;
+}
+
+/* angular ui-grid */
+
+/*  ui-grid: para controlar el style en el angular  */
+.angularGrid {
+    width: 95%;
+    height: auto;
+    font-size: x-small;
+  }
+
+.angularGridOneRow {
+    width: 95%;
+    height: 70px;
+    font-size: x-small;
+  }
+
+.angularGrid_Wide {
+    width: 100%;
+    height: 150px;
+    font-size: x-small;
+  }
+
+.angularGrid_Short {
+    width: 95%;
+    height: 150px;
+    font-size: x-small;
+  }
+
+
+/*  ui-grid: para justificar el texto en las celdas  */
+.ui-grid-centerCell {
+    text-align: center;
+}
+
+.ui-grid-rightCell {
+    text-align: right;
+}
+
+.ui-grid-leftCell {
+    text-align: left;
+}
+
+.alignLeft {
+    text-align: left;
+}
+
+.alignCenter {
+    text-align: center;
+}
+
+.generalTitle {
+    background-color: #326897;
+    color: #D7FDFF;
+    text-align: left;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.generaSimplelTitle {
+    color: #326897;
+    text-align: center;
+    padding: 10px;
+}
+
+.ui-viewBorder {
+    border-radius: 5px;
+    border: solid 1px lightgray;
+    text-align: center;
+    padding: 10px 40px 10px 40px;
+}
+
+
+/* para poner en rojo un icon de font awesome cuando el usaurio hace hover (por ejemplo el X en los grids ...)
+   style="color: #A5999C" */
+.redOnHover {
+    color: #A5999C;
+}
+.redOnHover:hover {
+    color: red;
+}
+
+.formlyBackground {
+    background-color: #F8F8F8;
+    border: 1px solid #E7E7E7;
+}
+
+.validation-message {
+    color: red;
+    font-size: x-small;
+}
+
+hr.blueLine {
+height: 1px;
+color: #004776;
+background-color: #004776;
+border: none;
+}
+
+.importantLink {
+    color: #15588D !important;
+}
+
+/*para desabilitar links */
+a.disabled {
+    /*color: #AAAAAA;*/
+    opacity: .5;
+    cursor: default;
+    pointer-events: none;
+    text-decoration: none;
+}
+
+/*para que el input luzca como que no se debe (aunque se pueda) editar ... */
+input.grisBackground {
+    background-color: lightgray;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.blue {
+    color: blue;
+}
+
+/* para mostrar algún texto como un link (anchor), por ejemplo en un <span> o <div> */
+
+.showAsLink {
+     cursor:pointer;
+     color:blue;
+     text-decoration:underline;
+     font-size: small;
+}
+
+.showAsLink:hover {
+     text-decoration:none;
+     text-shadow: 1px 1px 1px #555;
+}

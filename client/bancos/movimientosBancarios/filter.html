@@ -1,0 +1,293 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<tabset style="text-align: left; ">
+    <tab heading="General">
+        <div class="row">
+            <form role="form" novalidate style="margin-top: 15px; ">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <!-- beneficiario -->
+                        <div class="col-sm-4 col-sm-offset-1">
+                            <div class="form-group">
+                                <label class="myinput-sm">Beneficiario: </label>
+                                <input type="text"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.beneficiario"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- fecha -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Fecha: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fecha1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fecha2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- concepto -->
+                        <div class="col-sm-4 col-sm-offset-1">
+                            <div class="form-group">
+                                <label class="myinput-sm">Concepto: </label>
+                                <input type="text"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.concepto"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- transaccion -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Número: </label>
+                                    <input type="number"
+                                           step="1"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.transaccion1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="number"
+                                           step="1"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.transaccion2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!--  -->
+                        <div class="col-sm-4 col-sm-offset-1">
+                        </div>
+                        <!-- monto -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Monto: </label>
+                                    <input type="number"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.monto1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="number"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.monto2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!--  -->
+                        <div class="col-sm-4 col-sm-offset-1">
+                        </div>
+                        <!-- fechaEntregado -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">F entregado: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaEntregado1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaEntregado2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </tab>
+
+    <tab heading="Listas">
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- bancos -->
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="cargos">Bancos: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="bancos"
+                                id="bancos"
+                                ng-model="filtro.bancos"
+                                ng-options="item.banco as item.nombre for item in bancos | orderBy:'nombre'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple"></select>
+                    </div>
+
+                    <!-- monedas -->
+                    <div class="col-sm-5 col-sm-offset-0">
+                        <label class="control-label input-label pull-left" for="departamentos">Monedas: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="monedas"
+                                id="monedas"
+                                ng-model="filtro.monedas"
+                                ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- tipos -->
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="estados">Tipos: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="tipos"
+                                id="tipos"
+                                ng-model="filtro.tipos"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                ng-options="item.tipo as item.tipo for item in tipos | orderBy:'tipo'"
+                                size="8"
+                                multiple="multiple">
+                            </select>
+                    </div>
+
+                    <!-- usuarios -->
+                    <div class="col-sm-5 col-sm-offset-0">
+                        <label class="control-label input-label pull-left" for="situacionActual">Usuarios: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="usuarios"
+                                id="usuarios"
+                                ng-model="filtro.usuarios"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                ng-options="item.usuario as item.usuario for item in usuarios | orderBy:'usuario'"
+                                size="8"
+                                multiple="multiple">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- cuentasBancarias -->
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="cuentasBancarias">
+                            Cuentas bancarias:
+                        </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="cuentasBancarias"
+                                id="cuentasBancarias"
+                                ng-model="filtro.cuentasBancarias"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                ng-options="item.cuentaBancaria as item.descripcion for item in cuentasBancarias | orderBy:'descripcion'"
+                                size="8"
+                                multiple="multiple">
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- cuentasBancarias -->
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="chequeras" style="width: 100%; ">
+                            <div>
+                                <div class="col-sm-6">
+                                    Chequeras:
+                                </div>
+                                <div class="col-sm-6 pull-right">
+                                    <input type="text"
+                                           ng-model="filtroChequeras"
+                                           style="height: 16px; width: 100%; font-weight: normal; " />
+                                </div>
+                            </div>
+                        </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="chequeras"
+                                id="chequeras"
+                                ng-model="filtro.chequeras"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                ng-options="item.numeroChequera as item.descripcion for item in (chequerasList | filter: { descripcion: filtroChequeras }) | orderBy:'descripcion'"
+                                size="8"
+                                multiple="multiple">
+                            </select>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </tab>
+</tabset>
+
+
+<div class="row">
+    <hr class="blueLine" />
+
+    <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+        Limpiar filtro
+    </a>
+
+    <a href="#" ng-click="aplicarFiltroYAbrirLista()" class="btn btn-primary btn-sm pull-right" style="min-width: 80px; margin-left: 20px; ">
+        Aplicar filtro
+    </a>
+
+    <a ng-if="origen == 'edicion'" href="#" ng-click="nuevo()" class="btn btn-default btn-sm pull-right" style="min-width: 80px; margin-right: 20px; ">
+        Nuevo
+    </a>
+</div>

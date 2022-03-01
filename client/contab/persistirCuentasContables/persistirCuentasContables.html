@@ -1,0 +1,23 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<h2>Persistir catálogo de cuentas contables</h2>
+
+<div>
+    <button class="btn btn-primary btn-sm" ng-click="persistirCatalogoCuentasContables()" style="margin-top: 10px; ">
+        Persistir catálogo de cuentas contables ...
+    </button>
+
+</div>

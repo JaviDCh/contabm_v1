@@ -1,0 +1,222 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        Asientos Contables - Imprimir listado de asientos contables
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                <div ng-show="showProgress">
+                    <span style="font-size: small; font-weight: bold; ">
+                        ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <div style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ ciaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <tabset style="text-align: left;">
+                    <tab heading="Listado (pdf)">
+
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+
+                                <form name="form.listadoAsientosContablesForm"
+                                      id="form.listadoAsientosContablesForm"
+                                      ng-submit="submitListadoAsientosContablesForm()"
+                                      class="form-horizontal"
+                                      role="form"
+                                      novalidate>
+
+                                    <div class="row">
+                                        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+
+                                            <fieldset class="scheduler-border" style="text-align: left; ">
+                                                <legend class="scheduler-border">Opciones: </legend>
+                                                <label style="font-size: small; font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="parametros.ordenarPorFechaRegistro">
+                                                           Ordenar por fecha de edición de cada comprobante
+                                                </label>
+                                                <br>
+                                                <label style="font-size: small; font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="parametros.saveFileToDisk">
+                                                           Guardar (Download)
+                                                </label>
+                                                <br>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-sm-offset-0">
+                                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 5px; min-width: 80px; ">Cerrar</button>
+                                <button type="submit" form="form.listadoAsientosContablesForm" class="btn btn-sm btn-primary pull-right" style="margin-right: 5px; min-width: 80px; ">Ok</button>
+                            </div>
+                        </div>
+
+                    </tab>
+                    <tab heading="Reporte (web)" style="overflow: auto; ">
+
+                        <div class="row">
+                            <div class="col-sm-12 col-sm-offset-0">
+                                <form name="form.listadoAsientosContables2Form"
+                                      id="form.listadoAsientosContables2Form"
+                                      ng-submit="submitListadoAsientosContables2Form()"
+                                      class="form-horizontal"
+                                      role="form"
+                                      novalidate>
+
+                                      <br />
+                                      <div class="row row-centered">
+                                          <div class="col-sm-4 col-centered">
+                                              <div class="form-group">
+                                                  <label>Desde</label>
+                                                  <input type="date"
+                                                         name="desde"
+                                                         class="form-control input-sm myinput-sm"
+                                                         ng-model="reportConfig.desde"
+                                                         ng-required="true"
+                                                         ng-model-options="{ updateOn: 'blur' }" />
+                                                   <span class="validation-message"
+                                                         ng-show="form.listadoAsientosContables2Form.$submitted &&
+                                                                  form.listadoAsientosContables2Form.desde.$error.required">
+                                                       Ud. debe indicar una fecha.
+                                                   </span>
+                                              </div>
+                                          </div>
+
+                                          <div class="col-sm-1 col-centered">
+                                          </div>
+
+                                          <div class="col-sm-4 col-centered">
+                                              <div class="form-group">
+                                                  <label>Hasta</label>
+                                                  <input type="date"
+                                                         name="hasta"
+                                                         class="form-control input-sm myinput-sm"
+                                                         ng-model="reportConfig.hasta"
+                                                         ng-required="true"
+                                                         ng-model-options="{ updateOn: 'blur' }" />
+                                                 <span class="validation-message"
+                                                       ng-show="form.listadoAsientosContables2Form.$submitted &&
+                                                                form.listadoAsientosContables2Form.hasta.$error.required">
+                                                     Ud. debe indicar una fecha.
+                                                 </span>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="row row-centered">
+                                          <div class="col-sm-4 col-centered">
+                                              <div class="form-group">
+                                                  <label>Fecha</label>
+                                                  <input type="date"
+                                                         name="fecha"
+                                                         class="form-control input-sm myinput-sm"
+                                                         ng-model="reportConfig.fecha"
+                                                         ng-model-options="{ updateOn: 'blur' }" />
+                                              </div>
+                                          </div>
+
+                                          <div class="col-sm-1 col-centered">
+                                          </div>
+
+                                          <div class="col-sm-4 col-centered">
+                                          </div>
+                                      </div>
+
+                                      <div class="row row-centered">
+                                          <div class="col-sm-9 col-centered">
+                                              <div class="form-group">
+                                                  <label>Titulo</label>
+                                                  <input type="text"
+                                                         name="titulo"
+                                                         class="form-control input-sm myinput-sm"
+                                                         ng-model="reportConfig.titulo"
+                                                         ng-required="false"
+                                                         ng-model-options="{ updateOn: 'blur' }" />
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                      <div class="row row-centered">
+                                          <div class="col-sm-4 col-centered">
+                                              <div class="form-group">
+                                                  <label>
+                                                      <input type="checkbox"
+                                                             name="saltoPaginaPorFecha"
+                                                             ng-model="reportConfig.saltoPaginaPorFecha">
+                                                      Salto de página por fecha
+                                                  </label>
+                                              </div>
+                                          </div>
+
+                                          <div class="col-sm-1 col-centered">
+                                          </div>
+
+                                          <div class="col-sm-4 col-centered">
+                                          </div>
+                                      </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <a ng-if="reportLink_show" href="{{reportLink}}" target="_blank">reporte de asientos contables ... </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 5px; min-width: 80px; ">Cerrar</button>
+                                <button class="btn btn-sm btn-primary pull-right" type="submit" form="form.listadoAsientosContables2Form" style="margin-right: 5px; min-width: 80px; ">Ok</button>
+                            </div>
+                        </div>
+
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <!-- <button type="submit" form="listadoAsientosContablesForm" class="btn btn-sm btn-primary" style="margin-right: 15px; min-width: 80px; ">Ok</button>
+                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 15px; min-width: 80px; ">Cerrar</button> -->
+            </div>
+        </div>
+    </div>
+</div>

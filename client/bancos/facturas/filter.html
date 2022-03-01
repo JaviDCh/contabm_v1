@@ -1,0 +1,246 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<tabset style="text-align: left; ">
+    <tab heading="General">
+        <div class="row">
+            <form role="form" novalidate style="margin-top: 15px; ">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <!-- desde -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">F emisión: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaEmision1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaEmision2" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- hasta -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">F recepción: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaRecepcion1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaRecepcion2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- numeroFactura -->
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Número de factura: </label>
+                                    <input type="text"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.numeroFactura" />
+                                </div>
+                            </div>
+                            <!-- numeroControl -->
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Número de control</label>
+                                    <input type="text"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.numeroControl" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <!-- fecha de pago -->
+                                <div class="form-group">
+                                    <label class="control-label input-label">F de pago: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaPago1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaPago2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- concepto -->
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Concepto: </label>
+                                    <input type="text"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.concepto" />
+                                </div>
+                            </div>
+                            <!-- compañía -->
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Compañía: </label>
+                                    <input type="text"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.nombreCompania" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <!-- numeroComprobante -->
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Comprobante (Seniat): </label>
+                                    <input type="text"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.numeroComprobante" />
+                                </div>
+                            </div>
+                            <!-- lote -->
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">Número de lote: </label>
+                                    <input type="text"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.lote" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </tab>
+
+    <tab heading="Listas">
+
+        <br />
+        <div class="row">
+            <!-- <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <label class="control-label input-label pull-left">Compañías: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                ng-model="filtro.proveedores"
+                                ng-options="item.proveedor as item.nombre for item in proveedores | orderBy:'nombre'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple"></select>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- estados -->
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <label class="control-label input-label pull-left">Estados: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                ng-model="filtro.estados"
+                                ng-options="item.estado as item.descripcion for item in estados | orderBy:'estado'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                        </select>
+                    </div>
+
+                    <div class="col-sm-5 col-sm-offset-0">
+                        <label class="control-label input-label pull-left">Tipo: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                ng-model="filtro.cxcCxP"
+                                ng-options="item.tipo as item.descripcion for item in cxcCxPList | orderBy:'descripcion'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </tab>
+    <tab heading="Otros">
+
+        <div class="row" style="text-align: left; ">
+            <div class="col-sm-4 col-sm-offset-4">
+                <br />
+
+                <fieldset class="scheduler-border" style="text-align: left; ">
+                    <legend class="scheduler-border">Mostrar solo: </legend>
+
+                    <label style="font-weight: normal; "><input type="checkbox" ng-model="filtro.soloFacturasConRetencionIva"> Facturas con retención iva</label><br>
+                    <label style="font-weight: normal; "><input type="checkbox" ng-model="filtro.soloFacturasConRetencionIslr"> Facturas con retención islr</label><br>
+                    <label style="font-weight: normal; "><input type="checkbox" ng-model="filtro.soloNotasDeCredito"> Notas de crédito</label>
+                </fieldset>
+
+                <br />
+            </div>
+        </div>
+
+    </tab>
+</tabset>
+
+
+<div class="row">
+    <hr class="blueLine" />
+
+    <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+        Limpiar filtro
+    </a>
+
+    <a href="#" ng-click="aplicarFiltroYAbrirLista()" class="btn btn-primary btn-sm pull-right" style="min-width: 80px; margin-left: 20px; ">
+        Aplicar filtro
+    </a>
+
+    <a href="#" ng-click="nuevo()" class="btn btn-default btn-sm pull-right" style="min-width: 80px; margin-right: 20px; " ng-if="origen == 'edicion'">
+        Nuevo
+    </a>
+</div>

@@ -1,0 +1,285 @@
+
+
+/* para hacer el navbar en bootstrap m�s peque�o; por ejemplo, para usarlo como toolbar en jquery modals ... */
+.navbar_custom_small {
+    width: 95%;
+    font-size: small;
+    height: 30px;
+    min-height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 5px;
+}
+
+.navbar_custom_small_fullWidth {
+    width: 100%;
+    font-size: small;
+    height: 30px;
+    min-height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 5px;
+}
+
+.navbar_custom_small_toolBar {
+    width: 100%;
+    font-size: small;
+    height: 30px;
+    min-height: 30px;
+    margin-top: 10px;
+    padding-left: 0;
+    padding-right: 5px;
+    margin-bottom: 3px;
+}
+
+nav ul li a.navbar_custom_small_header {
+    font-size: small;
+    font-style: italic;
+    font-weight: bold;
+    color: #E17009 !important;
+    height: 30px;
+    min-height: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+
+nav ul li a.navbar_custom_small_node_red {
+    font-size: small;
+    padding: 5px;
+}
+
+nav ul li a:hover.navbar_custom_small_node_red {
+    color: #B74138 !important;
+    font-style: italic;
+}
+
+a:hover.navbar_custom_small_header, a:focus.navbar_custom_small_header {
+    background-color: transparent !important;
+}
+
+nav ul li a.navbar_custom_small_node {
+    font-size: small;
+    padding: 5px;
+}
+
+nav ul li ul li a.navbar_custom_small_node {
+    padding: 5px;
+    font-size: small;
+}
+
+nav ul li a.navbar_custom_xsmall_node {
+    font-size: 12px;
+    padding: 5px;
+}
+
+nav ul li ul li a.navbar_custom_xsmall_node {
+    padding: 5px;
+    font-size: 12px;
+}
+
+
+nav ul li a:hover.navbar_custom_small_node {
+    color: #428BCA !important;
+    font-style: italic;
+}
+
+nav ul li a:hover.navbar_custom_xsmall_node {
+    color: #428BCA !important;
+    background-color: #E0E0E0 !important;
+    font-style: italic;
+}
+
+
+nav ul li a.navbar_custom_small_node_withBackground {
+    padding: 5px;
+    font-size: 12px;
+}
+
+nav ul li a:hover.navbar_custom_small_node_withBackground {
+    color: #428BCA !important;
+    background-color: #E0E0E0 !important;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.navbar-nopaddingleft {
+    padding-left: 0;
+}
+
+input.form-control {
+    font-size: 12px !important;
+}
+
+select.form-control {
+    font-size: 12px !important;
+}
+
+textarea.form-control {
+    font-size: 12px !important;
+}
+
+/*.checkbox {
+    font-size: 12px !important;
+}*/
+
+.myinput-sm {
+    font-size: small !important;
+}
+
+.myinput-xsm {
+    font-size: x-small !important;
+}
+
+.textarea-label {
+    text-align: left;
+    margin-left: 10px;
+    font-size: small;
+    font-weight: bold;
+}
+
+.input-label {
+    font-size: small !important;
+    font-weight: bold !important;
+}
+
+.input-label-xs {
+    font-size: x-small !important;
+    font-weight: bold !important;
+}
+
+/* fieldset: básicamente, para revertir el fieldset a su diseño original (en vez de bootstrap) */
+fieldset.scheduler-border {
+    border: 1px groove #BEE0F3 !important;
+    padding: 0 1.4em 0.5em 1.4em !important;
+    margin: 0.5em 0 1.5em 0 !important;
+    -webkit-box-shadow:  0 0 0 0 #000;
+            box-shadow:  0 0 0 0 #000;
+}
+
+legend.scheduler-border {
+    font-size: small !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    margin-bottom: 5px;
+    border-bottom:none;
+}
+
+legend.scheduler-border-xsm {
+    font-size: x-small !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width:auto;
+    padding:0 10px;
+    margin-bottom: 5px;
+    border-bottom:none;
+}
+
+textarea.wide-textarea {
+    width: 100%;
+    /*min-width: 300px;*/
+}
+
+
+/* navbar: para agregar separadores entre los links de la barra (divider-vertical) */
+.navbar .divider-vertical {
+height: 30px;
+margin: 10px 9px;
+border-left: 1px solid #9D9D9D;
+border-right: 0 solid #9D9D9D;
+}
+
+.navbar .divider-vertical-small {
+height: 18px;
+margin: 5px 4px;
+border-left: 1px solid #9D9D9D;
+border-right: 0 solid #9D9D9D;
+}
+
+.datepicker {
+    font-size: smaller;
+}
+
+/* para agregar algunos cambios, muy menores al style en tables en bootstrap */
+
+.table {
+     font-size: small;
+}
+
+.table-xsmall {
+    font-size: x-small;
+}
+
+.table th {
+    color: #F7F7F7 !important;
+    background-color: #428BCA !important;
+    font-weight: bold !important;
+    border: 1px solid #BBB !important;
+}
+
+.table-xsmall th {
+    color: #F7F7F7 !important;
+    background-color: #428BCA !important;
+    font-weight: bold !important;
+    border: 1px solid #BBB !important;
+}
+
+.table caption {
+    color: #808080 !important;
+    font-size: small;
+}
+
+.table-xsmall caption {
+    color: #808080 !important;
+    font-size: small;
+}
+
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #eeeeea;
+}
+
+.table-xsmall tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #eeeeea;
+}
+
+.table>tbody>tr>td {
+    vertical-align: middle;
+}
+
+.table-xsmall>tbody>tr>td {
+    vertical-align: middle;
+}
+
+
+/* angular paging directive  */
+.navigation-bar .pagination {
+    font-size: x-small !important;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/*  angular ui-bootstrap modal  */
+.modal-header {
+    background: #0480BE;
+}
+
+.modal-title {
+    color: white;
+}
+
+/* centered columns styles */
+/* para centrar columnas cuando sus anchos no suman un numero par; por ejemplo: 3 - 3 - 3 */
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+}

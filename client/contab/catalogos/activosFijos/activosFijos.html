@@ -1,0 +1,579 @@
+
+
+
+
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+
+    <div class="col-sm-4 col-sm-offset-0" style="text-align: left; ">
+        <div style="text-align: right; font-style: italic; ">
+            <span style="color: dodgerblue">{{ companiaSeleccionada.nombreCorto }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row" style="font-size: small; ">
+    <tabset style="text-align: left;">
+
+        <tab heading="Filtro" active="activeTab.tab1">
+
+            <div class="row" style="margin-top: 15px; ">
+                <form role="form" novalidate>
+                    <div class="container-fluid">
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Descripción: </label>
+                                        <input type="text"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.descripcion" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Modelo: </label>
+                                        <input type="text"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.modelo" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Fecha compra: </label>
+                                        <input type="date"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.fechaCompra1" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">&nbsp;</label>
+                                        <input type="date"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.fechaCompra2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Serial: </label>
+                                        <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="filtro.serial" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Placa: </label>
+                                        <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="filtro.placa" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">F desincorporación: </label>
+                                        <input type="date"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.fechaDesincorporacion1" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">&nbsp;</label>
+                                        <input type="date"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.fechaDesincorporacion2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </form>
+            </div>
+
+            <div class="row">
+                <hr class="blueLine" />
+
+                <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+                    Limpiar filtro
+                </a>
+
+                <a href="#" ng-click="aplicarFiltro()" class="btn btn-primary btn-sm pull-right" style="min-width: 80px; margin-right: 30px; margin-left: 20px; ">
+                    Aplicar filtro
+                </a>
+
+                <a href="#" ng-click="nuevo()" class="btn btn-default btn-sm pull-right" style="min-width: 80px; margin-right: 20px; ">
+                    Nuevo
+                </a>
+            </div>
+        </tab>
+
+        <tab heading="Lista" active="activeTab.tab2">
+            <div class="row" style="text-align: center; ">
+                <div class="col-sm-12 col-sm-offset-0">
+
+                    <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li><a class="navbar_custom_small_header">&nbsp;&nbsp;&nbsp;</a></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="grabarEliminaciones()">Grabar <span class="fa fa-save"></span></a></li>
+                                </ul>
+
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li><a href="#" ng-click="leerMasRegistros()" class="navbar_custom_small_node_withBackground">Más ...</a></li>
+                                    <li><a href="#" ng-click="leerTodosLosRegistros()" class="navbar_custom_small_node_withBackground">Todo</a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div ui-grid="activosFijos_ui_grid"
+                         ui-grid-resize-columns
+                         ui-grid-selection
+                         ui-grid-pinning
+                         class="angularGrid"
+                         style="height: 350px; width: 100%; ">
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col-sm-12 col-sm-offset-0" style="text-align: right; ">
+                    <button class="btn btn-default btn-sm" style="min-width: 80px; " ng-click="nuevo()">
+                        Nuevo
+                    </button>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Detalles" active="activeTab.tab3">
+            <br />
+            <div class="row row-centered">
+                <div class="col-sm-9 col-centered">
+                    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li ng-if="activoFijo.docState"><a href="#" class="navbar_custom_small_header"><em>Activo fijo</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                                    <li ng-if="!activoFijo.docState"><a href="#" class="navbar_custom_small_header"><em>Activo fijo</em></a></li>
+
+                                    <li><a href="#" ng-click="grabar()"  class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+                                    <li class="divider-vertical-small" ></li>
+                                    <li><a href="#" ng-click="nuevo()"  class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                                    <li><a href="#" ng-click="eliminar()"  class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+                                    <li class="divider-vertical-small"></li>
+                                    <li><a href="#" ng-click="calcularDepreciacion()"  class="navbar_custom_small_node">Calcular depreciación&nbsp;&nbsp;<span class="fa fa-gears"></span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <div class="col-sm-9 col-centered">
+                    <form role="form"
+                        name="cajaChicaForm"
+                        novalidate
+                        style="margin-top: 15px; text-align: left; font-size: small; ">
+
+                        <tabset style="text-align: left;">
+
+                            <tab heading="Detalles del activo fijo">
+                                <br />
+                                <div class="row row-centered">
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>ID</label><br />
+                                            <span  style="color: #337AB7; font-weight: bold; ">
+                                                {{ activoFijo.claveUnica }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-centered"></div>
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Producto</label><br />
+                                            <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="activoFijo.producto"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="row row-centered">
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Departamento </label>
+                                            <select class="form-control input-sm myinput-sm"
+                                                    ng-model="activoFijo.departamento"
+                                                    ng-options="item.departamento as item.descripcion for item in departamentos | orderBy:'descripcion'"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-centered"></div>
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Tipo</label>
+                                            <select class="form-control input-sm myinput-sm"
+                                                    ng-model="activoFijo.tipo"
+                                                    ng-options="item.tipo as item.descripcion for item in tiposProducto | orderBy:'descripcion'"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="row row-centered">
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Proveedor </label>
+                                            <select class="form-control input-sm myinput-sm"
+                                                    ng-model="activoFijo.proveedor"
+                                                    ng-options="item.proveedor as item.abreviatura for item in proveedores | orderBy:'abreviatura'"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-centered"></div>
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Serial</label>
+                                            <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="activoFijo.serial"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="row row-centered">
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Modelo </label>
+                                            <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="activoFijo.modelo"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-centered"></div>
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Placa</label>
+                                            <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="activoFijo.placa"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="row row-centered">
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>Factura</label><br />
+                                            <input type="text"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="activoFijo.factura"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 col-centered"></div>
+                                    <div class="col-sm-4 col-centered">
+                                        <div class="form-group">
+                                            <label>F compra</label>
+                                            <input type="date"
+                                                class="form-control input-sm myinput-sm"
+                                                ng-model="activoFijo.fechaCompra"
+                                                ng-change="setIsEdited()"
+                                                ng-model-options="{ updateOn: 'blur' }" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row row-centered">
+                                    <div class="col-sm-9 col-centered">
+                                        <div class="form-group">
+                                            <label>Descripción </label>
+                                            <textarea class="form-control input-sm myinput-sm"
+                                                    rows="2"
+                                                    ng-model="activoFijo.descripcion"
+                                                    ng-change="setIsEdited()"
+                                                    ng-model-options="{ updateOn: 'blur' }" >
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tab>  
+
+                            <tab heading="Costo y desincorporación" >
+                                <br />
+
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Costo del activo</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row row-centered">
+                                            <div class="col-sm-3 col-centered">
+                                                <div class="form-group">
+                                                    <label>Costo total</label><br />
+                                                    <input type="number"
+                                                        class="form-control input-sm myinput-sm"
+                                                        ng-model="activoFijo.costoTotal"
+                                                        ng-change="setIsEdited()"
+                                                        ng-model-options="{ updateOn: 'blur' }" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-3 col-centered">
+                                                <div class="form-group">
+                                                    <label>Valor residual</label><br />
+                                                    <input type="number"
+                                                        class="form-control input-sm myinput-sm"
+                                                        ng-model="activoFijo.valorResidual"
+                                                        ng-change="setIsEdited()"
+                                                        ng-model-options="{ updateOn: 'blur' }" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-sm-3 col-centered">
+                                                <div class="form-group">
+                                                    <label>Monto a depreciar</label>
+                                                    <input type="number"
+                                                        class="form-control input-sm myinput-sm"
+                                                        ng-model="activoFijo.montoADepreciar"
+                                                        ng-change="setIsEdited()"
+                                                        ng-model-options="{ updateOn: 'blur' }" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">Desincorporación del activo</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        
+                                        <div class="row row-centered">
+                                            <div class="col-sm-3 col-centered">
+                                                    <br>
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="checkbox"
+                                                                   ng-model="activoFijo.desincorporadoFlag"
+                                                                   ng-change="setIsEdited()">
+                                                            Desincorporado
+                                                        </label>
+                                                    </div>
+                                            </div>
+
+                                            <div class="col-sm-3 col-centered">
+                                                <div class="form-group">
+                                                    <label>Fecha</label><br />
+                                                    <input type="date"
+                                                        class="form-control input-sm myinput-sm"
+                                                        ng-model="activoFijo.fechaDesincorporacion"
+                                                        ng-change="setIsEdited()"
+                                                        ng-model-options="{ updateOn: 'blur' }" />
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-sm-3 col-centered">
+                                                <div class="form-group">
+                                                    <label>Autorizado por </label>
+                                                    <select class="form-control input-sm myinput-sm"
+                                                            ng-model="activoFijo.autorizadoPor"
+                                                            ng-options="item.empleado as item.alias for item in empleados | orderBy:'alias'"
+                                                            ng-change="setIsEdited()"
+                                                            ng-model-options="{ updateOn: 'blur' }">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row row-centered">
+                                            <div class="col-sm-9 col-centered">
+                                                <div class="form-group">
+                                                    <label>Motivo </label>
+                                                    <textarea class="form-control input-sm myinput-sm"
+                                                            rows="2"
+                                                            ng-model="activoFijo.motivoDesincorporacion"
+                                                            ng-change="setIsEdited()"
+                                                            ng-model-options="{ updateOn: 'blur' }" >
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </tab>
+
+                            <tab heading="Depreciación mensual" >
+                                <br />
+
+                                <div class="row row-centered">
+                                    <div class="col-sm-5 col-centered" style="vertical-align: top; ">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">Resumen</h4>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="form-group">
+                                                    <label>Fecha de compra: </label>
+                                                    <span  style="font-weight: bold; ">
+                                                        {{ activoFijo.fechaCompra | date:'dd-MM-yyyy' }}
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Cantidad de años: </label>
+                                                    <span  style="font-weight: bold; ">
+                                                        {{ activoFijo.numeroDeAnos }}
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Monto a depreciar: </label>
+                                                    <span  style="font-weight: bold; ">
+                                                        {{ activoFijo.montoADepreciar | currency : "" : 2 }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-5 col-centered">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title">Cálculo de la depreciación</h4>
+                                            </div>
+                                            <div class="panel-body">
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-6 col-centered">
+                                                            <label>Cantidad de años: </label>
+                                                    </div>
+
+                                                    <div class="col-sm-5 col-centered" style="max-width: 100px; ">
+                                                        <input type="number"
+                                                            class="form-control input-sm myinput-sm"
+                                                            ng-model="activoFijo.numeroDeAnos"
+                                                            ng-change="setIsEdited()"
+                                                            ng-model-options="{ updateOn: 'blur' }" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Depreciar desde (mes/año): </label>
+                                                    <span  style="font-weight: bold; ">
+                                                        {{ activoFijo.depreciarDesdeMes }} / {{ activoFijo.depreciarDesdeAno }}
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Depreciar hasta (mes/año): </label>
+                                                    <span  style="font-weight: bold; ">
+                                                            {{ activoFijo.depreciarHastaMes }} / {{ activoFijo.depreciarHastaAno }}
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Depreciar en (meses): </label>
+                                                    <span  style="font-weight: bold; ">
+                                                        {{ activoFijo.cantidadMesesADepreciar }}
+                                                    </span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Monto depreciación (mensual): </label>
+                                                    <span  style="font-weight: bold; ">
+                                                        {{ activoFijo.montoDepreciacionMensual | currency : "" : 2 }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </tab>
+
+                        </tabset>
+                        
+                    </form>
+
+                    <br />
+
+                    <div class="row row-centered">
+                        <div class="col-sm-11 col-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; "> 
+                            <!-- ingreso, ult actualización y usuario  -->
+                            <div class="col-sm-4" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Ingreso: </label>
+                                <br />
+                                <span>{{ activoFijo.ingreso | date:'dd-MM-yyyy hh:mm a' }} </span>
+                            </div>
+                            <div class="col-sm-4" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Ult act: </label>
+                                <br />
+                                <span>{{ activoFijo.ultAct | date:'dd-MM-yyyy hh:mm a' }} </span>
+                            </div>
+                            <div class="col-sm-4" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Usuario: </label>
+                                <br />
+                                <span>{{ activoFijo.usuario }} </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <br />
+        </tab>
+    </tabset>
+</div>

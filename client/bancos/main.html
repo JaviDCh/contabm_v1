@@ -1,0 +1,149 @@
+
+<!-- nótese como mostramos el navbar solo cuando la página no viene de afuera (ng-if="!vieneDeAfuera")...
+vieneDeAfuera es true cuando una página, como factura, es abierta desde otro módulo en contab, como pagos ...  -->
+<nav class="navbar navbar-fixed-top navbar-default" role="navigation" ng-hide="vieneDeAfuera">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/bancos" style="font-style: italic; color: #02008D; ">bancos</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+                <!-- Nótese como usamos ui-show, en vez de ui-if, pues sub-menu parece no funcionar de otra forma ...  -->
+                <li class="dropdown" ng-show="userHasRole(['bancos_catalogos'])">
+                    <a href=" #" class="dropdown-toggle" data-toggle="dropdown">Catálogos <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+                        <li><a ui-sref="bancos.monedas">Monedas</a></li>
+                        <li><a ui-sref="bancos.cuentasBancarias">Bancos y cuentas bancarias</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="bancos.proveedoresClientes">Proveedores y clientes</a></li>
+                        <li><a ui-sref="bancos.definicionCuentasContables">Cuentas contables - definición</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="bancos.unidadTributaria">Unidad tributaria</a></li>
+                        <li><a ui-sref="bancos.categoriasRetencion">Categorías de retención</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="bancos.parametros">Parámetros</a></li>
+                        <li><a ui-sref="bancos.parametrosGlobal">Parámetros globales</a></li>
+                        <li class="divider"></li>
+
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Caja chica</a>
+                            <ul class="dropdown-menu">
+                                <li><a ui-sref="bancos.cajaChica_cajasChicas">Cajas chicas</a></li>
+                                <li><a ui-sref="bancos.cajaChica_rubros">Rubros</a></li>
+                                <li><a ui-sref="bancos.cajaChica_cuentasContables">Cuentas contables - asociación</a></li>
+                                <li><a ui-sref="bancos.cajaChica_parametros">Parámetros</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="divider"></li>
+                        <li><a ui-sref="bancos.companias">Compañías</a></li>
+                    </ul>
+                </li> 
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Facturas y pagos <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Facturas</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userHasRole(['bancos_facturas'])"><a ui-sref="bancos.facturas.filter({ origen: 'edicion' })">Edición</a></li>
+                                <li ng-if="userHasRole(['bancos_consultas']) || userHasRole(['bancos'])"><a ui-sref="bancos.facturas.filter({ origen: 'consulta' })">Consulta</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pagos</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userHasRole(['bancos_pagos'])"><a ui-sref="bancos.pagos.filter({ origen: 'edicion' })">Edición</a></li>
+                                <li ng-if="userHasRole(['bancos_consultas']) || userHasRole(['bancos'])"><a ui-sref="bancos.pagos.filter({ origen: 'consulta' })">Consulta</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Movimientos bancarios <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movimientos bancarios</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userHasRole(['bancos_movimientos'])"><a ui-sref="bancos.movimientosBancarios.filter({ origen: 'edicion' })">Edición</a></li>
+                                <li ng-if="userHasRole(['bancos_consultas']) || userHasRole(['bancos'])"><a ui-sref="bancos.movimientosBancarios.filter({ origen: 'consulta' })">Consulta</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Conciliación</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userHasRole(['bancos_conciliacion'])"><a ui-sref="bancos.conciliacionesBancarias.filter({ origen: 'edicion' })">Edición</a></li>
+                                <li ng-if="userHasRole(['bancos_consultas']) || userHasRole(['bancos'])"><a ui-sref="bancos.conciliacionesBancarias.filter({ origen: 'consulta' })">Consulta</a></li>
+                            </ul>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="bancos.impuestoTransaccionesFinancieras">Impuesto transacciones financieras</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-if="userHasRole(['caja_chica_admin']) || userHasRole(['caja_chica']) || userHasRole(['caja_chica_consulta'])">Caja chica <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reposiciones</a>
+                            <ul class="dropdown-menu">
+                                <li ng-if="userHasRole(['caja_chica_admin']) || userHasRole(['caja_chica'])"><a ui-sref="bancos.cajaChica({ origen: 'edicion' })">Edición</a></li>
+                                <li ng-if="userHasRole(['caja_chica_admin']) || userHasRole(['caja_chica']) || userHasRole(['caja_chica_consulta'])"><a ui-sref="bancos.cajaChica({ origen: 'consulta' })">Consulta</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cierres <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li ng-if="userHasRole(['bancos_cierres'])"><a ui-sref="bancos.cierre">Cierre</a></li>
+                        <li><a ui-sref="bancos.ultimoMesCerrado">Ultimo mes cerrado</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Generales <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a ui-sref="bancos.SeleccionarCompania">Seleccionar una compañía</a></li>
+                        <li class="divider"></li>
+                        <li ng-if="userHasRole(['bancos'])"><a ui-sref="bancos.CopiarCatalogos">Copiar catálogos</a></li>
+                        <li ng-if="userHasRole(['bancos'])"><a ui-sref="bancos.registrarFiles">Registrar archivos&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.PersistirCuentasContables">Persistir cuentas contables (<em>desde contab</em>)</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/" > <i class="fa fa-home fa-lg"></i></a></li>
+                <li><a href="#" ng-click="mostrarHelp()"> <i class="fa fa-question fa-lg"></i></a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div>
+</nav>
+
+
+<div class="container-fluid body-content">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                <span ng-bind-html="alert.msg"></span>
+            </alert>
+        </div>
+    </div>
+
+    <div class="row">
+        <div ui-view class="ui-viewBorder"></div>
+    </div>
+</div>

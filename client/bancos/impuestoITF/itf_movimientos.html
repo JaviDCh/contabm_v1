@@ -1,0 +1,66 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+
+        <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        <li><a href="#" class="navbar_custom_small_header"><em>Movimientos bancarios </em></a></li>
+
+                        <li><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                        <li class="divider-vertical-small"></li>
+                        <li><a href="#" ng-click="generarITF()" class="navbar_custom_small_node">Generar movimientos de impuesto </a></li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#" ng-click="regresarAlFiltro()" class="navbar_custom_small_node">Regresar...</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+        <div class="row">
+
+            <nav class="navbar navbar-default navbar_custom_small_fullWidth" role="navigation">
+                <div class="container-fluid navbar-nopaddingleft">
+                    <div class="collapse navbar-collapse navbar-nopaddingleft">
+                        <ul class="nav navbar-nav">
+                            <li><a href="#" class="navbar_custom_small_header">Movimientos bancarios </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div ui-grid="movimientosBancarios_ui_grid"
+                 ui-grid-resize-columns
+                 ui-grid-edit
+                 ui-grid-cellnav
+                 class="angularGrid"
+                 style="height: 450px; width: 100%; ">
+            </div>
+
+        </div>
+    </div>
+</div>

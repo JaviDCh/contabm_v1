@@ -1,0 +1,105 @@
+﻿
+<div >
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+
+            <div class="col-sm-4" style="text-align: right; font-style: italic; ">
+                <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+            <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+               <div class="container-fluid">
+                   <div class="navbar-collapse collapse">
+                       <ul class="nav navbar-nav">
+
+                           <li><a href="#" class="navbar_custom_small_header">Files</a></li>
+
+                           <li><a href="#" class="navbar_custom_small_node" ng-click="mostrarFilesRegistradas()">Mostrar archivos registrados</a></li>
+
+                       </ul>
+                   </div>
+               </div>
+           </nav>
+        </div>
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                <span ng-bind-html="alert.msg | unsafe"></span>
+            </alert>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <form id="grabarFilesForm"
+                  name="grabarFilesForm"
+                  role="form"
+                  novalidate
+                  style="margin-top: 15px; "
+                  ng-submit="submitGrabarFilesForm()" >
+
+                <div class="container-fluid">
+
+                    <div class="row">
+
+                        <div class="col-sm-5">
+                            <div class="form-group form-group-sm">
+                                <label for="tipoArchivo" class="control-label input-label pull-left">Tipo: </label>
+                                <select class="form-control input-sm myinput-sm"
+                                        id="tipoArchivo"
+                                        name="tipoArchivo"
+                                        ng-model="tipoArchivo"
+                                        ng-options="item.id as item.descripcion for item in fileTypes_List | orderBy: 'descripcion'"
+                                        required
+                                        ng-change="tipoArchivo_change()">
+                                        <!-- ng-model-options="{ updateOn: 'blur' }"> -->
+                                </select>
+
+                                <div class="validation-message myinput-xsm"
+                                     ng-show="submitted && grabarFilesForm.tipoImagen.$error.required">
+                                    Indique un valor.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-sm-offset-1">
+                            <div class="form-group form-group-sm">
+                                <label  for="fileInputControl" class="control-label input-label pull-left">&nbsp;&nbsp;</label>
+                                <br />
+                                <input type="file"
+                                       id="fileInputControl"
+                                       name="fileInputControl"
+                                       accept="docx,xlsx"
+                                       onchange="angular.element(this).scope().uploadFile(this.files)" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 50px; ">
+                        <div class="col-sm-12 col-sm-offset-0">
+                            <button type="submit"
+                                    form="grabarFilesForm"
+                                    class="btn btn-sm btn-primary pull-right">
+                                        Grabar el archivo seleccionado
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

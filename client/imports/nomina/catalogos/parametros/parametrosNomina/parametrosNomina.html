@@ -1,0 +1,123 @@
+
+
+
+<div class="row">
+    <div class="col-sm-4">
+        <h4 style="margin: 0 0 0 30; color: #3183B9; text-align: left; ">Nómina - Parámetros - Definición</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a class="navbar_custom_small_header">Nómina - Parámetros </a>
+                </li>
+                <li>
+                    <a href="#" class="navbar_custom_small_node" ng-click="save()">Grabar <span class="fa fa-save"></span></a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+        <form role="form" name="empleadosForm" novalidate style="margin-top: 15px; text-align: left; font-size: small; ">
+
+            <tabset>
+                <tab heading="Generales">
+                </tab>
+
+                <tab heading="Asientos contables de nómina">
+                    <br />
+                    <div class="row row-centered">
+                        <!-- agregarAsientosContables -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" 
+                                           ng-model="parametrosNomina.agregarAsientosContables" 
+                                           ng-change="setIsEdited()"> 
+                                        Agregar
+                                </label>
+                            </div>
+                        </div>
+                        <!-- cuentaContableNomina -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Cuenta contable de nómina</label>
+                                <select class="form-control"
+                                        ng-model="parametrosNomina.cuentaContableNomina" 
+                                        ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista | orderBy:'cuentaDescripcionCia'"
+                                        ng-change="setIsEdited()" 
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                        <!-- tipoAsientoDefault -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Tipo de asiento (por defecto)</label>
+                                <select class="form-control input-sm myinput-sm" 
+                                        ng-model="parametrosNomina.tipoAsientoDefault" 
+                                        ng-options="item.tipo as item.descripcion for item in tiposAsientoContable | orderBy:'descripcion'"
+                                        ng-change="setIsEdited()" 
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <!-- monedaParaElAsiento -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Moneda para el asiento (por defecto)</label>
+                                <select class="form-control" 
+                                        ng-model="parametrosNomina.monedaParaElAsiento" 
+                                        ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                        ng-change="setIsEdited()" 
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                        <!-- sumarizarPartidaAsientoContable -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Sumarizar</label>
+                                <select class="form-control" 
+                                        ng-model="parametrosNomina.sumarizarPartidaAsientoContable" 
+                                        ng-options="item.id as item.descripcion for item in sumarizarAsientosContables_list | orderBy:'descripcion'"
+                                        ng-change="setIsEdited()" 
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-centered">
+                        </div>
+                    </div>
+                </tab>
+
+            </tabset>
+        </form>
+    </div>
+</div>

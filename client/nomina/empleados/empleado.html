@@ -1,0 +1,857 @@
+
+
+<div>
+
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li ng-if="empleado.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Empleados</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!empleado.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Empleados</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+                    <!-- <li class="divider-vertical-small"></li> -->
+                    <!-- <li><a href="#" ng-click="imprimir()" class="navbar_custom_small_node">Imprimir&nbsp;&nbsp;<span class="fa fa-print"></span></a></li> -->
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <!-- <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li> -->
+
+                    <!-- <li class="dropdown" ng-if="origen=='edicion'">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Copiar <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="exportarAsientoContable()" class="navbar_custom_small_node">Exportar&nbsp;&nbsp;<span class="fa fa-share"></span></a></li>
+                            <li><a href="#" ng-click="importarAsientoContable()" class="navbar_custom_small_node">Importar&nbsp;&nbsp;<span class="fa fa-reply"></span></a></li>
+                        </ul>
+                    </li> -->
+
+                    <li class="divider-vertical-small"></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Otros <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="sueldos()" class="navbar_custom_small_node">Sueldos&nbsp;&nbsp;<span class="fa fa-television"></span></a></li>
+                            <li><a href="#" ng-click="faltas()" class="navbar_custom_small_node">Faltas&nbsp;&nbsp;<span class="fa fa-television"></span></a></li>
+                        </ul>
+                    </li>
+
+                    <li class="divider-vertical-small"></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Varios <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="cartaDeTrabajo()" class="navbar_custom_small_node">Carta de trabajo&nbsp;&nbsp;<span class="fa fa-file-word-o"></span></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <input type="file"
+           id = "fileInput"
+           accept = ".txt"
+           multiple = "false"
+           onchange = "angular.element(this).scope().uploadFile(this.files)"
+           ng-show="false">
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <form
+              role="form"
+              name="empleadosForm"
+              novalidate
+              style="margin-top: 15px; text-align: left; font-size: small; ">
+
+              <tabset>
+                  <tab heading="General">
+                    <br />
+                    <div class="row row-centered">
+                        <!-- número -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Número</label><br />
+                                <span  style="color: #337AB7; font-weight: bold; ">
+                                    {{ empleado.empleado }}
+                                </span>
+                            </div>
+                        </div>
+                        <!-- cedula -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="cedula">Cédula</label>
+                                <input type="text"
+                                       name="cedula"
+                                       id="cedula"
+                                       class="form-control"
+                                       ng-model="empleado.cedula"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- nombre -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="nombre">Nombre</label>
+                                <input type="text"
+                                       name="nombre"
+                                       id="nombre"
+                                       class="form-control"
+                                       ng-model="empleado.nombre"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <!-- rif -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="rif">Rif</label>
+                                <input type="text"
+                                       name="rif"
+                                       id="rif"
+                                       class="form-control"
+                                       ng-model="empleado.rif"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- alias -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="cedula">Alias</label>
+                                <input type="text"
+                                       name="alias"
+                                       id="alias"
+                                       class="form-control"
+                                       ng-model="empleado.alias"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- empleadoObreroFlag -->
+                        <!-- nótese convertToNumber para corregir cuando el tipo de las opciones no es string -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="empleadoObreroFlag">Tipo</label>
+                                <select class="form-control"
+                                        name="empleadoObreroFlag"
+                                        id="empleadoObreroFlag"
+                                        ng-model="empleado.empleadoObreroFlag"
+                                        convert-to-number
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        required>
+                                        <option value=1>Empleado</option>
+                                        <option value=2>Obrero</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row row-centered">
+                        <!-- cargo -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="cargo">Cargo</label>
+                                <select class="form-control input-sm myinput-sm"
+                                        name="cargo"
+                                        id="cargo"
+                                        ng-model="empleado.cargoID"
+                                        ng-options="item.cargo as item.descripcion for item in cargos | orderBy:'descripcion'"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                        <!-- situacionActual -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="situacionActual">Situación actual</label>
+                                <select class="form-control"
+                                        name="situacionActual"
+                                        id="situacionActual"
+                                        ng-model="empleado.situacionActual"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        required>
+                                        <option value="NO">Normal</option>
+                                        <option value="VA">Vacaciones</option>
+                                        <option value="RE">Retirado</option>
+                                        <option value="LI">Liquidado</option>
+                                    </select>
+                            </div>
+                        </div>
+                        <!-- status -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="status">Estado</label>
+                                <select class="form-control"
+                                        name="status"
+                                        id="status"
+                                        ng-model="empleado.status"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        required>
+                                        <option value="A">Activo</option>
+                                        <option value="S">Suspendido</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <!-- departamento -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="departamento">Departamento</label>
+                                <select class="form-control input-sm myinput-sm"
+                                        name="departamento"
+                                        id="departamento"
+                                        ng-model="empleado.departamentoID"
+                                        ng-options="item.departamento as item.descripcion for item in departamentos | orderBy:'descripcion'"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                        <!-- escribirArchivoXMLRetencionesISLR -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <br />
+                                <label>
+                                    <input type="checkbox"
+                                           ng-model="empleado.escribirArchivoXMLRetencionesISLR"
+                                           ng-change="setIsEdited()">
+                                    Escribir al archivo (xml) de retenciones de islr
+                                </label>
+                            </div>
+                        </div>
+                        <!-- tipoNomina -->
+                        <!-- nótese convertToNumber para corregir cuando el tipo de las opciones no es string -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="tipoNomina">Tipo de nómina</label>
+                                <select class="form-control"
+                                        name="tipoNomina"
+                                        id="tipoNomina"
+                                        ng-model="empleado.tipoNomina"
+                                        convert-to-number
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        required>
+                                        <option value=1>Quincenal</option>
+                                        <option value=2>Mensual</option>
+                                        <option value=3>Otra</option>
+                                    </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <!--  -->
+                        <div class="col-sm-3 col-centered">
+
+                        </div>
+                        <!--  -->
+                        <div class="col-sm-3 col-centered">
+
+                        </div>
+                        <!-- montoCestaTickets -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="montoCestaTickets">Monto cesta tickets</label>
+                                <input type="number"
+                                       name="montoCestaTickets"
+                                       id="montoCestaTickets"
+                                       class="form-control"
+                                       ng-model="empleado.montoCestaTickets"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <!-- fechaIngreso -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="fechaIngreso">F ingreso</label>
+                                <input type="date"
+                                       name="fechaIngreso"
+                                       id="fechaIngreso"
+                                       class="form-control"
+                                       ng-model="empleado.fechaIngreso"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- fechaRetiro -->
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label for="fechaRetiro">F retiro</label>
+                                <input type="date"
+                                       name="fechaRetiro"
+                                       id="fechaRetiro"
+                                       class="form-control"
+                                       ng-model="empleado.fechaRetiro"
+                                       ng-change="setIsEdited()"
+                                       ng-required="true"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+
+                        <div class="col-sm-3 col-centered">
+                        </div>
+
+                        <div class="col-sm-3 col-centered">
+                        </div>
+
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group" style="color: #337AB7; font-weight: bold; text-align: right; ">
+                                {{ empleado.cia | companiaNombreCortoFilter_byNumeroContab }}
+                            </div>
+                        </div>
+                    </div>
+
+            </tab>
+
+            <tab heading="Personales">
+              <br />
+              <div class="row row-centered">
+                  <!-- nacionalidad -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="nacionalidad">Nacionalidad</label>
+                          <select class="form-control"
+                                  name="nacionalidad"
+                                  id="nacionalidad"
+                                  ng-model="empleado.nacionalidad"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }"
+                                  required>
+                                  <option value="V">Venezolano</option>
+                                  <option value="E">Extranjero</option>
+                              </select>
+                      </div>
+                  </div>
+                  <!-- edoCivil -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="edoCivil">Estado civil</label>
+                          <select class="form-control"
+                                  name="edoCivil"
+                                  id="edoCivil"
+                                  ng-model="empleado.edoCivil"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }"
+                                  required>
+                                  <option value="SO">Soltero</option>
+                                  <option value="CA">Casado</option>
+                                  <option value="DI">Divorciado</option>
+                                  <option value="VI">Viudo</option>
+                                  <option value="CO">Concubino</option>
+                              </select>
+                      </div>
+                  </div>
+                  <!-- ciudadOrigen -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="ciudadOrigen">Ciudad (de origen)</label>
+                          <select class="form-control input-sm myinput-sm"
+                                  name="ciudadOrigen"
+                                  id="ciudadOrigen"
+                                  ng-model="empleado.ciudadOrigen"
+                                  ng-options="item.ciudad as item.descripcion for item in ciudades | orderBy:'descripcion'"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row row-centered">
+                  <!-- sexo -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="sexo">Sexo</label>
+                          <select class="form-control"
+                                  name="sexo"
+                                  id="sexo"
+                                  ng-model="empleado.sexo"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }"
+                                  required>
+                                  <option value="M">Masculino</option>
+                                  <option value="F">Femenino</option>
+                              </select>
+                      </div>
+                  </div>
+                  <!-- telefono1 -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="telefono1">Teléfono</label>
+                          <input type="text"
+                                 name="telefono1"
+                                 id="telefono1"
+                                 class="form-control"
+                                 ng-model="empleado.telefono1"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- telefono2 -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="telefono2">Teléfono</label>
+                          <input type="text"
+                                 name="telefono2"
+                                 id="telefono2"
+                                 class="form-control"
+                                 ng-model="empleado.telefono2"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+              </div>
+
+
+              <div class="row row-centered">
+                  <!-- fechaNacimiento -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="fechaNacimiento">F nacimiento</label>
+                          <input type="date"
+                                 name="fechaNacimiento"
+                                 id="fechaNacimiento"
+                                 class="form-control"
+                                 ng-model="empleado.fechaNacimiento"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+
+                  <!-- email -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="email">e-mail</label>
+                          <input type="text"
+                                 name="email"
+                                 id="email"
+                                 class="form-control"
+                                 ng-model="empleado.email"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+
+                  <!-- direccionHabitacion -->
+                  <div class="col-sm-3 col-centered">
+                  </div>
+              </div>
+
+              <div class="row row-centered">
+                  <!-- direccionHabitacion -->
+                  <div class="col-sm-6 col-centered">
+                      <div class="form-group">
+                          <label for="direccionHabitacion">Dirección (habitación)</label>
+                          <textarea  rows="2"
+                                     name="direccionHabitacion"
+                                     id="direccionHabitacion"
+                                     class="form-control"
+                                     ng-model="empleado.direccionHabitacion"
+                                     ng-change="setIsEdited()"
+                                     ng-required="true"
+                                     ng-model-options="{ updateOn: 'blur' }">
+                           </textarea>
+                      </div>
+                  </div>
+                  <!-- email -->
+                  <div class="col-sm-3 col-centered">
+                  </div>
+              </div>
+          </tab>
+
+          <tab heading="Contactos">
+            <br />
+            <div class="row row-centered">
+                <!-- contacto1 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="contacto1">Nombre</label>
+                        <input type="text"
+                               name="contacto1"
+                               id="contacto1"
+                               class="form-control"
+                               ng-model="empleado.contacto1"
+                               ng-change="setIsEdited()"
+                               ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+                <!-- parentesco1 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="parentesco1">Parentesco</label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="parentesco1"
+                                id="parentesco1"
+                                ng-model="empleado.parentesco1"
+                                ng-options="item.parentesco as item.descripcion for item in parentescos | orderBy:'descripcion'"
+                                ng-change="setIsEdited()"
+                                ng-model-options="{ updateOn: 'blur' }">
+                        </select>
+                    </div>
+                </div>
+                <!-- telefonoCon1 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="telefonoCon1">Teléfono</label>
+                        <input type="text"
+                               name="telefonoCon1"
+                               id="telefonoCon1"
+                               class="form-control"
+                               ng-model="empleado.telefonoCon1"
+                               ng-change="setIsEdited()"
+                               ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <!-- contacto2 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="contacto2">Nombre</label>
+                        <input type="text"
+                               name="contacto2"
+                               id="contacto2"
+                               class="form-control"
+                               ng-model="empleado.contacto2"
+                               ng-change="setIsEdited()"
+                               ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+                <!-- parentesco2 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="parentesco2">Parentesco</label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="parentesco2"
+                                id="parentesco2"
+                                ng-model="empleado.parentesco2"
+                                ng-options="item.parentesco as item.descripcion for item in parentescos | orderBy:'descripcion'"
+                                ng-change="setIsEdited()"
+                                ng-model-options="{ updateOn: 'blur' }">
+                        </select>
+                    </div>
+                </div>
+                <!-- telefonoCon2 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="telefonoCon2">Teléfono</label>
+                        <input type="text"
+                               name="telefonoCon2"
+                               id="telefonoCon2"
+                               class="form-control"
+                               ng-model="empleado.telefonoCon2"
+                               ng-change="setIsEdited()"
+                               ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <!-- contacto3 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="contacto3">Nombre</label>
+                        <input type="text"
+                               name="contacto3"
+                               id="contacto3"
+                               class="form-control"
+                               ng-model="empleado.contacto3"
+                               ng-change="setIsEdited()"
+                               ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+                <!-- parentesco3 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="parentesco3">Parentesco</label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="parentesco3"
+                                id="parentesco3"
+                                ng-model="empleado.parentesco3"
+                                ng-options="item.parentesco as item.descripcion for item in parentescos | orderBy:'descripcion'"
+                                ng-change="setIsEdited()"
+                                ng-model-options="{ updateOn: 'blur' }">
+                        </select>
+                    </div>
+                </div>
+                <!-- telefonoCon3 -->
+                <div class="col-sm-3 col-centered">
+                    <div class="form-group">
+                        <label for="telefonoCon3">Teléfono</label>
+                        <input type="text"
+                               name="telefonoCon3"
+                               id="telefonoCon3"
+                               class="form-control"
+                               ng-model="empleado.telefonoCon3"
+                               ng-change="setIsEdited()"
+                               ng-required="true"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+            </div>
+
+          </tab>
+
+          <tab heading="Cuentas bancarias">
+            <br />
+
+            <fieldset class="scheduler-border" style="text-align: left; ">
+                <legend class="scheduler-border">Cuenta bancaria para el depósito de nómina: </legend>
+
+                <div class="row row-centered">
+                    <!-- bancoDepositosNomina -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label for="bancoDepositosNomina">Banco</label>
+                            <select class="form-control input-sm myinput-sm"
+                                    name="bancoDepositosNomina"
+                                    id="bancoDepositosNomina"
+                                    ng-model="empleado.bancoDepositosNomina"
+                                    ng-options="item.banco as item.nombre for item in bancos | orderBy:'nombre'"
+                                    ng-change="setIsEdited()"
+                                    ng-model-options="{ updateOn: 'blur' }">
+                            </select>
+                        </div>
+                    </div>
+                    <!-- tipoCuentaDepositosNomina -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label for="tipoCuentaDepositosNomina">Tipo de cuenta</label>
+                            <select class="form-control input-sm myinput-sm"
+                                    name="tipoCuentaDepositosNomina"
+                                    id="tipoCuentaDepositosNomina"
+                                    ng-model="empleado.tipoCuentaDepositosNomina"
+                                    ng-options="item.tipoCuenta as item.descripcion for item in tiposDeCuentaBancaria | orderBy:'descripcion'"
+                                    ng-change="setIsEdited()"
+                                    ng-model-options="{ updateOn: 'blur' }">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-centered">
+                    <!-- cuentaBancariaDepositosNomina -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label for="cuentaBancariaDepositosNomina">Número de cuenta</label>
+                            <input type="text"
+                                   name="cuentaBancariaDepositosNomina"
+                                   id="cuentaBancariaDepositosNomina"
+                                   class="form-control"
+                                   ng-model="empleado.cuentaBancariaDepositosNomina"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!--  -->
+                    <div class="col-sm-3 col-centered">
+                    </div>
+                </div>
+
+            </fieldset>
+
+            <fieldset class="scheduler-border" style="text-align: left; ">
+                <legend class="scheduler-border">Cuenta bancaria para el depósito de prestaciones sociales: </legend>
+
+                <div class="row row-centered">
+                    <!-- bancoCuentaPrestacionesSociales -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label for="bancoCuentaPrestacionesSociales">Banco</label>
+                            <select class="form-control input-sm myinput-sm"
+                                    name="bancoCuentaPrestacionesSociales"
+                                    id="bancoCuentaPrestacionesSociales"
+                                    ng-model="empleado.bancoCuentaPrestacionesSociales"
+                                    ng-options="item.banco as item.nombre for item in bancos | orderBy:'nombre'"
+                                    ng-change="setIsEdited()"
+                                    ng-model-options="{ updateOn: 'blur' }">
+                            </select>
+                        </div>
+                    </div>
+                    <!-- numeroCuentaBancariaPrestacionesSociales -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label for="numeroCuentaBancariaPrestacionesSociales">Número de cuenta</label>
+                            <input type="text"
+                                   name="numeroCuentaBancariaPrestacionesSociales"
+                                   id="numeroCuentaBancariaPrestacionesSociales"
+                                   class="form-control"
+                                   ng-model="empleado.numeroCuentaBancariaPrestacionesSociales"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+
+          </tab>
+
+          <tab heading="Bono vacacional">
+            <br />
+
+            <fieldset class="scheduler-border" style="text-align: left; ">
+                <legend class="scheduler-border">Definición de la base para el cálculo del bono vacacional: </legend>
+
+                <br />
+
+                <div class="row row-centered">
+                    <!-- bonoVacAgregarSueldoFlag -->
+                    <div class="col-sm-4 col-centered">
+                        <div class="form-group">
+                            <!-- <br /> -->
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="empleado.bonoVacAgregarSueldoFlag"
+                                       ng-change="setIsEdited()">
+                                Sueldo (definido en esta tabla)
+                            </label>
+                        </div>
+                    </div>
+                    <!--  -->
+                    <div class="col-sm-3 col-centered">
+                    </div>
+                </div>
+
+                <div class="row row-centered">
+                    <!-- bonoVacAgregarMontoCestaTicketsFlag -->
+                    <div class="col-sm-4 col-centered">
+                        <div class="form-group">
+                            <!-- <br /> -->
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="empleado.bonoVacAgregarMontoCestaTicketsFlag"
+                                       ng-change="setIsEdited()">
+                                Monto en cesta tickets (definido en esta tabla)
+                            </label>
+                        </div>
+                    </div>
+                    <!--  -->
+                    <div class="col-sm-3 col-centered">
+                    </div>
+                </div>
+
+                <div class="row row-centered">
+                    <!-- bonoVacAgregarMontoAdicionalFlag -->
+                    <div class="col-sm-4 col-centered">
+                        <div class="form-group">
+                            <!-- <br /> -->
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="empleado.bonoVacAgregarMontoAdicionalFlag"
+                                       ng-change="setIsEdited()">
+                                Monto (fijo - definido al lado)
+                            </label>
+                        </div>
+                    </div>
+                    <!--  bonoVacacionalMontoAdicional  -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label for="bonoVacacionalMontoAdicional">Monto</label>
+                            <input type="number"
+                                   name="bonoVacacionalMontoAdicional"
+                                   id="bonoVacacionalMontoAdicional"
+                                   class="form-control"
+                                   ng-model="empleado.bonoVacacionalMontoAdicional"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+          </tab>
+
+          <tab heading="Prestaciones">
+            <br />
+
+            <fieldset class="scheduler-border" style="text-align: left; ">
+                <legend class="scheduler-border">Configuración del proceso de prestaciones para el empleado: </legend>
+
+                <br />
+
+                <div class="row row-centered">
+                    <!-- prestacionesAgregarMontoCestaTicketsFlag -->
+                    <div class="col-sm-10 col-centered">
+                        <div class="form-group" style="text-align: center; ">
+                            <!-- <br /> -->
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="empleado.prestacionesAgregarMontoCestaTicketsFlag"
+                                       ng-change="setIsEdited()">
+                                Agregar el monto de cesta tickets al proceso de cálculo de prestaciones
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
+          </tab>
+        </tabset>
+    </form>
+
+    </div>
+</div>

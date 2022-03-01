@@ -1,0 +1,237 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        Cuentas contables - Detalles
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+                <span style="color: dodgerblue">{{ companiaSeleccionadaDoc.nombre }}</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form name="cuentasContables_detalles_form"
+                      id="exportarAsientosContablesForm"
+                      ng-submit="submit_cuentasContables_detalles_form()"
+                      class="form-horizontal"
+                      role="form"
+                      novalidate>
+
+                      <div class="row row-centered">
+                          <!-- número -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Id: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.id }}</p>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <div class="col-sm-5 col-centered">
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- cuenta editada -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Cuenta (editada): </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.cuentaEditada }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- cuenta contable -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Cuenta contable: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.cuenta }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- grupo -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Grupo: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ grupoContableNombre }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- descripción -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Descripción: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.descripcion }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- cuenta editada -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Cantidad niveles: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.numNiveles }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- cuenta contable -->
+                          <div class="col-sm-5 col-centered">
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- nivel 1 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 1: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel1 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- nivel 2 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 2: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel2 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- nivel 3 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 3: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel3 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- nivel 4 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 4: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel4 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- nivel 5 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 5: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel5 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- nivel 6 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 6: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel6 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- nivel 7 -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Nivel 7: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.nivel7 }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- nivel 2 -->
+                          <div class="col-sm-5 col-centered">
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <!-- totDet -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Total/detalle: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.totDet }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- actSusp -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Activa/suspendida: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ cuentaContableSeleccionada.actSusp }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="row row-centered">
+                          <div class="col-sm-5 col-centered">
+                          </div>
+                          <!-- cia contab -->
+                          <div class="col-sm-5 col-centered">
+                              <div class="form-group form-group-sm" style="margin-bottom: 0; ">
+                                  <label class="col-sm-6 control-label input-label">Cia contab: </label>
+                                  <div class="col-sm-6">
+                                      <p class="form-control-static pull-left">{{ companiaContab }}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <!-- <button type="submit" form="exportarAsientosContablesForm" class="btn btn-sm btn-primary" style="margin-right: 15px; min-width: 80px; ">Ok</button> -->
+                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 5px; min-width: 80px; ">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

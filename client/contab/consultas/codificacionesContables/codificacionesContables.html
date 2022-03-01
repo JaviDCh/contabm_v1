@@ -1,0 +1,30 @@
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+        <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+    </div>
+</div>
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+        <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+
+                        <li><a href="#" class="navbar_custom_small_header"><em>Codificaciones contables diferentes (Condi) - Consulta</em></a></li>
+                        <!-- <li class="divider-vertical-small"></li> -->
+                        <li><a ui-sref="contab.consulta_codificacionesContables.prepararDatos" class="navbar_custom_small_node">Preparar datos </a></li>
+                        <li><a ui-sref="contab.consulta_codificacionesContables.consultas" class="navbar_custom_small_node">Consultas </a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <div ui-view class="ui-viewBorder"></div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "allowJs": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true, 
+    "baseUrl": "."
+  },
+  "include": [
+    "client/**/*",
+    "server/**/*",
+    "imports/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".meteor",
+    "pdfMake_from_bower"
+  ]
+}

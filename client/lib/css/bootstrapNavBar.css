@@ -1,0 +1,42 @@
+
+
+/* --------------------------------------- */
+/* para lograr una especie de blue navbar */
+.blueNavbar .navbar.navbar-default {
+    background-color: #5381D6;
+    border-color: #557BC5;
+}
+
+/* link */
+.blueNavbar .navbar-default .navbar-nav > li > a {
+    color: #EFF3FB;
+}
+
+.blueNavbar .navbar-default .navbar-nav > li > a:hover,
+.blueNavbar .navbar-default .navbar-nav > li > a:focus {
+    color: #EFF3FB;
+    background-color: #00397F;
+}
+
+.blueNavbar .navbar-default .navbar-nav > .active > a,
+.blueNavbar .navbar-default .navbar-nav > .active > a:hover,
+.blueNavbar .navbar-default .navbar-nav > .active > a:focus {
+    color: #EFF3FB;
+    background-color: #00397F;
+}
+
+/* ------------------------------------------------ */
+/* para agregar énfasis a las opciones en el navbar */
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: #EFF3FB;
+    background-color: #4A5D72;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #EFF3FB;
+    background-color: #4A5D72;
+}

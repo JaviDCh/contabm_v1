@@ -1,0 +1,241 @@
+
+
+<div>
+
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li ng-if="conciliacionBancaria.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Conciliaciones bancarias</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!conciliacionBancaria.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Conciliaciones bancarias</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li class="dropdown" ng-if="origen == 'edicion'">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Movimientos bancarios <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="cargarMovimientosBancariosPropios()" class="navbar_custom_small_node">Cargar propios&nbsp;&nbsp;</a></li>
+                            <li><a href="#" ng-click="cargarMovimientosBancariosDelBanco()" class="navbar_custom_small_node">Cargar del banco&nbsp;&nbsp;<span class="fa fa-file-excel-o"></span></a></li>
+                            <li><a href="#" ng-click="cargarMovimientosBancariosAsientosContables()" class="navbar_custom_small_node">Cargar asientos contables&nbsp;&nbsp;</a></li>
+                            <li><a href="#" ng-click="compararMovimientosBancarios()" class="navbar_custom_small_node">Comparar&nbsp;&nbsp;</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="divider-vertical-small"></li>
+                    <li><a href="#" ng-click="exportarExcel()" class="navbar_custom_small_node">Exportar&nbsp;&nbsp;<span class="fa fa-file-excel-o"></span></a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                <div ng-show="showProgress">
+                    <span style="font-size: small; font-weight: bold; ">
+                        ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <tabset style="text-align: left; ">
+            <tab heading="Generales">
+                <div class="row">
+                    <div class="col-sm-12 col-sm-offset-0">
+
+                        <form
+                              role="form"
+                              name="movimientosBancariosForm"
+                              novalidate
+                              style="margin-top: 5px; text-align: left; font-size: small; ">
+
+                              <div class="row row-centered">
+
+                                  <div class="col-sm-5 col-centered">
+                                      <div class="form-group">
+                                          <div class="col-sm-6 col-centered">
+                                              <label for="desde">Desde</label>
+                                              <input type="date"
+                                                     name="desde"
+                                                     id="desde"
+                                                     class="form-control"
+                                                     ng-model="conciliacionBancaria.desde"
+                                                     ng-change="setIsEdited('desde')"
+                                                     ng-required="true"
+                                                     ng-model-options="{ updateOn: 'blur' }" />
+                                          </div>
+                                          <div class="col-sm-6 col-centered">
+                                              <label for="desde">Hasta</label>
+                                              <input type="date"
+                                                     name="hasta"
+                                                     id="hasta"
+                                                     class="form-control"
+                                                     ng-model="conciliacionBancaria.hasta"
+                                                     ng-change="setIsEdited('hasta')"
+                                                     ng-required="true"
+                                                     ng-model-options="{ updateOn: 'blur' }" />
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="col-sm-1 col-centered">
+                                  </div>
+
+                                  <!-- Cuenta -->
+                                  <div class="col-sm-4 col-centered">
+                                      <div class="form-group">
+                                          <label for="cuentaBancaria">Cuenta bancaria</label>
+                                          <select class="form-control"
+                                                  name="cuentaBancaria"
+                                                  id="cuentaBancaria"
+                                                  ng-model="conciliacionBancaria.cuentaBancaria"
+                                                  ng-change="setIsEdited('cuentaBancaria')"
+                                                  ng-options="item.cuentaBancaria as item.descripcion for item in cuentasBancarias | orderBy:'descripcion'"
+                                                  ng-model-options="{ updateOn: 'blur' }"
+                                                  required></select>
+                                      </div>
+                                  </div>
+
+                              </div>
+
+                              <div class="row row-centered">
+
+                                  <div class="col-sm-5 col-centered">
+                                  </div>
+
+                                  <div class="col-sm-1 col-centered">
+                                  </div>
+
+                                  <!-- Cuenta contable -->
+                                  <div class="col-sm-4 col-centered">
+                                      <div class="form-group">
+                                          <label for="cuentaBancaria">Cuenta contable</label>
+                                          <select class="form-control"
+                                                  name="cuentaContable"
+                                                  id="cuentaContable"
+                                                  ng-model="conciliacionBancaria.cuentaContable"
+                                                  ng-change="setIsEdited('cuentaContable')"
+                                                  ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContables | orderBy:'cuentaDescripcionCia'"
+                                                  ng-model-options="{ updateOn: 'blur' }"
+                                                  required></select>
+                                      </div>
+                                  </div>
+
+                              </div>
+
+                                <div class="row row-centered">
+                                    <!-- observaciones -->
+                                    <div class="col-sm-10 col-centered">
+                                        <div class="form-group">
+                                            <label for="observaciones">Observaciones</label>
+                                            <textarea name="observaciones"
+                                                   id="observaciones"
+                                                   class="form-control"
+                                                   ng-model="conciliacionBancaria.observaciones"
+                                                   ng-change="setIsEdited('observaciones')"
+                                                   ng-model-options="{ updateOn: 'blur' }"
+                                                   rows="2"
+                                                   ng-required="true">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row row-centered">
+                                    <div class="col-sm-10 col-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; ">
+                                        <!-- ingreso, ult actualización y usuario  -->
+                                        <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                            <label style="font-size: x-small; ">Ingreso: </label>
+                                            <br />
+                                            <span>{{ conciliacionBancaria.ingreso | date:'dd-MM-yyyy hh:mm a'}} </span>
+                                        </div>
+                                        <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                            <label style="font-size: x-small; ">Ult act: </label>
+                                            <br />
+                                            <span>{{ conciliacionBancaria.ultMod | date:'dd-MM-yyyy hh:mm a'}} </span>
+                                        </div>
+                                        <div class="col-sm-4 col-centered" style="text-align: center; ">
+                                            <label style="font-size: x-small; ">Usuario: </label>
+                                            <br />
+                                            <span>{{ conciliacionBancaria.usuario }} </span>
+                                        </div>
+                                    </div>
+                                </div>
+                        </form>
+
+                    </div>
+                </div>
+            </tab>
+
+            <tab heading="Movimientos propios">
+                <div class="row" style="text-align: center; ">
+                    <div class="col-sm-12 col-sm-offset-0">
+
+                        <div ui-grid="movimientosPropios_ui_grid"
+                             ui-grid-resize-columns
+                             ui-grid-selection
+                             class="angularGrid"
+                             style="height: 300px; width: 100%; ">
+                        </div>
+
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Movimientos contables">
+                <div class="row" style="text-align: center; ">
+                    <div class="col-sm-12 col-sm-offset-0">
+
+                        <div ui-grid="movimientosContables_ui_grid"
+                             ui-grid-resize-columns
+                             ui-grid-selection
+                             class="angularGrid"
+                             style="height: 300px; width: 100%; ">
+                        </div>
+
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Movimientos del banco">
+                <div class="row" style="text-align: center; ">
+                    <div class="col-sm-12 col-sm-offset-0">
+
+                        <div ui-grid="movimientosBanco_ui_grid"
+                             ui-grid-resize-columns
+                             ui-grid-selection
+                             class="angularGrid"
+                             style="height: 300px; width: 100%; ">
+                        </div>
+
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+
+    </div>
+</div>

@@ -1,0 +1,139 @@
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <div ng-show="processProgress.current != null" style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </div>
+            <div ng-show="processProgress.message" style="font-size: x-small; font-weight: bold; ">
+                ({{ processProgress.message }})
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <!--<span ng-bind-html="alert.msg | unsafe"></span>-->
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <h4>Códificaciones contables - Preparar datos</h4>
+    </div>
+</div>
+
+<div class="row" style="text-align: center; ">
+
+    <tabset style="text-align: left; ">
+        <tab heading="General">
+            <br />
+            <div class="col-sm-4 col-sm-offset-0">
+                <div class="col-sm-8 col-sm-offset-2" style="font-size: small; ">
+                    <div class="form-group" style="text-align: left; ">
+                        <label>Desde</label>
+                        <input type="date"
+                               class="form-control"
+                               ng-model="filtro.periodo.desde"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+
+                    <div class="form-group" style="text-align: left; ">
+                        <label>Hasta</label>
+                        <input type="date"
+                               class="form-control"
+                               ng-model="filtro.periodo.hasta"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-sm-offset-0">
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Codificaciones contables </a></li>
+                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="agregarCodificacion()">Nuevo <span class="fa fa-file-o"></span></a></li> -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="codificaciones_ui_grid"
+                    ui-grid-resize-columns
+                    ui-grid-selection
+                    class="angularGrid"
+                    style="height: 130px; width: 100%; ">
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-sm-offset-0">
+                <br />
+                <label class="control-label input-label-xs pull-left" for="monedas">Monedas: </label>
+                <select class="myinput-xsm form-control input-sm"
+                        name="monedas"
+                        id="monedas"
+                        ng-model="filtro.moneda"
+                        ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                        ng-model-options="{ updateOn: 'blur' }"
+                        size="3"
+                        style="font-size: x-small !important; "
+                        multiple="multiple"></select>
+
+                <br />
+                <label class="control-label input-label-xs pull-left" for="monedasOriginales">Mon originales: </label>
+                <select class="myinput-xsm form-control input-sm"
+                        name="monedasOriginales"
+                        id="monedasOriginales"
+                        ng-model="filtro.monedaOriginal"
+                        ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                        ng-model-options="{ updateOn: 'blur' }"
+                        size="3"
+                        style="font-size: x-small !important; "
+                        multiple="multiple"></select>
+            </div>
+        </tab>
+        <tab heading="Opciones">
+            <br />
+            <div class="row row-centered" style="font-size: small; ">
+                <div class="col-sm-6 col-centered">
+                    <fieldset class="scheduler-border" style="text-align: left; ">
+                        <legend class="scheduler-border">Excluír cuentas contables: </legend>
+                            <div class="row">
+                                <!-- excluir_sinMovimientosEnElPeriodo -->
+                                <div class="col-sm-9 col-offset-3">
+                                    <div class="form-group">
+                                        <label style="font-weight: normal; ">
+                                            <input type="checkbox"
+                                                   ng-model="filtro.excluir_sinSaldosNiMovimientosEnElPeriodo"
+                                                   ng-change="setIsEdited()">
+                                            Sin saldo inicial ni movimientos en el período indicado
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                    </fieldset>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+
+</div>
+
+
+<br />
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+        <button class="btn btn-sm btn-primary pull-right" ng-click="prepararDatos()">Preparar datos ...</button>
+    </div>
+</div>

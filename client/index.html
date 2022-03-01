@@ -1,0 +1,18 @@
+
+<head>
+    <title>contabm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+</head>
+
+<!-- el navbar (navbar-fixed-top) en bootstrap (3.0) necesita un padding-top de 70px; sin embargo, cuando
+una página 'viene de afuera',  intentamos siempre no mostrar el navbar (principal). Por eso, el padding-top
+de 70px reseva mucho más espacio del deseado cuando 'viene de afuera' ...  -->
+
+<body ng-app="contabm" 
+      ng-controller="MainController"
+      ng-style="vieneDeAfuera ? { 'padding-top': '25px' } : { 'padding-top': '70px' }">
+        <div class="container body-content">
+            <div class="row" ui-view></div>
+        </div>
+</body>

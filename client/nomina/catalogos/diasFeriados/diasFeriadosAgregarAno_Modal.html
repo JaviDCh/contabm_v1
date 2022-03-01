@@ -1,0 +1,86 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Nómina - Días feriados - Agregar días feriados para un año</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <form name="diasFeriadosAgregarDiasFeriadosAnoForm"
+                  id="diasFeriadosAgregarDiasFeriadosAnoForm"
+                  ng-submit="diasFeriadosAgregarDiasFeriadosAnoForm_submit()"
+                  role="form"
+                  novalidate
+                  style="margin-top: 15px; ">
+
+                <div class="container-fluid">
+
+                    <div class="row row-centered">
+                        <div class="col-sm-4 col-centered">
+                            <div class="form-group form-group-sm">
+                                <label class="control-label input-label">Año: </label>
+                                <input type="number"
+                                       class="form-control input-sm myinput-sm"
+                                       style="max-width: 150px; "
+                                       ng-model="parametros.ano"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="row" style="text-align: center; ">
+            <div class="col-sm-12 col-sm-offset-0">
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a class="navbar_custom_small_header">Nómina - Días feriados para el año indicado</a></li>
+                                <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoDiaFeriado()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="diasFeriados_ui_grid"
+                     ui-grid-edit
+                     ui-grid-cellnav
+                     ui-grid-resize-columns
+                     ui-grid-selection
+                     class="angularGrid"
+                     style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="submit" form="diasFeriadosAgregarDiasFeriadosAnoForm" class="btn btn-sm btn-primary" style="min-width: 80px; ">1) Calcular días feriados</button>
+    <button ng-click="agregarItemsArrayDiasFeriados()" class="btn btn-sm btn-primary" style="min-width: 80px; ">2) Agregar días feriados</button>
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; min-width: 80px; ">Cerrar</button>
+</div>

@@ -1,0 +1,59 @@
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <div ng-show="processProgress.current != null" style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </div>
+            <div ng-show="processProgress.message" style="font-size: x-small; font-weight: bold; ">
+                ({{ processProgress.message }})
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+
+  <h3>Eliminar compañías <em><b>Contab</b></em></h3>
+
+  <div style="text-align: left; padding-left: 200px; padding-right: 200px; padding-top: 15px; ">
+    <p>
+      Este proceso permite eliminar todos los datos asociados a la compañía <em><b>Contab</b></em> seleccionada, y que han sido registrados
+      en la base de datos por los usuarios del programa.
+    </p>
+
+    <p>
+      Entre los datos que elimina este proceso están: facturas y pagos, movimientos bancarios, asientos contables, cuentas
+      contables, registros de saldos contables, información de caja chica, etc.
+    </p>
+
+    <p>
+      Como indicamos más abajo, el objetivo de este proceso es eliminar todos los datos que corresponden a la compañía
+      <em><b>Contab</b></em> seleccionada, aunque no ella misma, la cual debe ser eliminada desde el catálogo de compañías <em><b>Contab</b></em>.
+    </p>
+
+    <p>
+      <b>Nota:</b> este proceso elimina todos estos datos en forma permanente y sin posibilidad de recuperarlos.
+    </p>
+
+    <p>
+      Por este motivo, es recomendable que Ud. se asegure muy bien que la compañía <em><b>Contab</b></em> seleccionada corresponde a que Ud.
+      realmente desea eliminar.
+    </p>
+
+    <p>
+      Aunque este proceso elimina datos para la compañía seleccionada, no elimina la compañía como tal. Para hacerlo, luego de
+      la ejecución de este proceso, Ud. debe abrir el catálogo de compañías y eliminar la compañía. Nótese que ésta no debe ser
+      la compañía seleccionada, para poder ser eliminada. Es decir, antes de eliminar la compañía, y luego de ejecutar este proceso,
+      Ud. debe seleccionada otra, ir al catálogo de compañías y eliminarla.
+    </p>
+  </div>
+
+  <div style="margin-top: 25px; ">
+      <button class="btn btn-primary btn-sm" ng-click="eliminarDatosCompaniaContabSeleccionada()" style="min-width: 300px; ">
+          Eliminar datos en <em><b>{{ companiaContabSeleccionada.nombreCorto }}</b></em> ...
+      </button>
+  </div>
+</div>

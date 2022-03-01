@@ -1,0 +1,328 @@
+
+
+
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+
+    <div class="col-sm-4 col-sm-offset-0" style="text-align: left; ">
+        <div style="text-align: right; font-style: italic; ">
+            <span style="color: dodgerblue">{{ companiaSeleccionada.nombreCorto }}</span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row" style="font-size: small; ">
+    <tabset style="text-align: left;">
+
+        <tab heading="Filtro" active="activeTab.tab1">
+
+            <div class="row" style="margin-top: 15px; ">
+                <form role="form" novalidate>
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <!-- reposicion -->
+                            <div class="col-sm-6">
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Número: </label>
+                                        <input type="number"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.reposicion1" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">&nbsp;</label>
+                                        <input type="number"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.reposicion2" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- fecha -->
+                            <div class="col-sm-6">
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Fecha: </label>
+                                        <input type="date"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.fecha1" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">&nbsp;</label>
+                                        <input type="date"
+                                               class="form-control input-sm myinput-sm"
+                                               ng-model="filtro.fecha2" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-0">
+                                <div class="col-sm-11 col-sm-offset-1">
+                                    <div class="form-group">
+                                        <label class="control-label input-label">Observaciones: </label>
+                                        <textarea class="form-control input-sm myinput-sm"
+                                                  rows="1"
+                                                  ng-model="filtro.observaciones">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-sm-offset-0">
+                                <!-- estados -->
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group form-group-sm">
+                                        <label class="control-label input-label pull-left">Estados: </label>
+                                        <select class="form-control input-sm myinput-sm"
+                                                ng-model="filtro.estados"
+                                                ng-options="item.estado as item.descripcion for item in estadosCajaChicaArray"
+                                                ng-model-options="{ updateOn: 'blur' }"
+                                                size="8"
+                                                multiple="multiple">
+                                        </select>
+                                    </div>
+                                </div>
+                                    
+                                <!-- cajas chicas -->
+                                <div class="col-sm-5 col-sm-offset-1">
+                                    <div class="form-group form-group-sm">
+                                        <label class="control-label input-label pull-left">Cajas chicas: </label>
+                                        <select class="form-control input-sm myinput-sm"
+                                                ng-model="filtro.cajasChicas"
+                                                ng-options="item.cajaChica as item.descripcion for item in cajasChicas | orderBy:'descripcion'"
+                                                ng-model-options="{ updateOn: 'blur' }"
+                                                size="8"
+                                                multiple="multiple">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row">
+                <hr class="blueLine" />
+
+                <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+                    Limpiar filtro
+                </a>
+
+                <a href="#" ng-click="aplicarFiltro()" class="btn btn-primary btn-sm pull-right" 
+                   style="min-width: 80px; margin-right: 30px; margin-left: 20px; ">
+                    Aplicar filtro
+                </a>
+
+                <a href="#" ng-click="nuevo()" class="btn btn-default btn-sm pull-right" style="min-width: 80px; margin-right: 20px; " 
+                   ng-if="origen == 'edicion'">
+                    Nuevo
+                </a>
+            </div>
+        </tab>
+
+        <tab heading="Lista" active="activeTab.tab2">
+            <div class="row" style="text-align: center; ">
+                <div class="col-sm-12 col-sm-offset-0">
+
+                    <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li><a class="navbar_custom_small_header">&nbsp;&nbsp;&nbsp;</a></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="grabarEliminaciones()">Grabar <span class="fa fa-save"></span></a></li>
+                                    <li class="divider-vertical-small"></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="exportarExcel()" >Exportar&nbsp;&nbsp;<span class="fa fa-file-excel-o"></span></a></li>
+                                </ul>
+
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li><a href="#" ng-click="leerMasRegistros()" class="navbar_custom_small_node_withBackground">Más ...</a></li>
+                                    <li><a href="#" ng-click="leerTodosLosRegistros()" class="navbar_custom_small_node_withBackground">Todo</a></li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div ui-grid="reposiciones_ui_grid"
+                         ui-grid-resize-columns
+                         ui-grid-selection
+                         ui-grid-pinning
+                         class="angularGrid"
+                         style="height: 250px; width: 100%; ">
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row" ng-if="origen == 'edicion'">
+                <div class="col-sm-12 col-sm-offset-0" style="text-align: right; ">
+                    <button class="btn btn-default btn-sm" style="min-width: 80px; " ng-click="nuevo()">
+                        Nuevo
+                    </button>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Detalles" active="activeTab.tab3">
+            <br />
+            <div class="row row-centered">
+                <div class="col-sm-9 col-centered">
+                    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li ng-if="reposicion.docState"><a href="#" class="navbar_custom_small_header"><em>Reposición de caja chica</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                                    <li ng-if="!reposicion.docState"><a href="#" class="navbar_custom_small_header"><em>Reposición de caja chica</em></a></li>
+
+                                    <li><a href="#" ng-click="grabar()" ng-if="origen == 'edicion'" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+                                    <li class="divider-vertical-small" ng-if="origen == 'edicion'"></li>
+                                    <li><a href="#" ng-click="nuevo()" ng-if="origen == 'edicion'" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                                    <li><a href="#" ng-click="eliminar()" ng-if="origen == 'edicion'" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+                                    <li class="divider-vertical-small"></li>
+                                    <li><a href="#" ng-click="asientoContable()" ng-if="origen == 'edicion'" class="navbar_custom_small_node">Asientos contables&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                                    <li><a ng-href="{{reportLink}}" target="_blank" class="navbar_custom_small_node">Reporte&nbsp;&nbsp;<span class="fa fa-print"></span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <form role="form"
+                    name="cajaChicaForm"
+                    novalidate
+                    style="margin-top: 15px; text-align: left; font-size: small; ">
+
+                    <div class="row row-centered">
+                        <div class="col-sm-8 col-centered">
+                            <span style="color: #004776; font-size: medium; ">Datos generales: </span>
+                            <hr style="margin-top: 0; " class="blueLine">
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Número</label><br />
+                                <span  style="color: #337AB7; font-weight: bold; ">
+                                    {{ reposicion.reposicion }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-centered"></div>
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Fecha</label>
+                                <input type="date"
+                                    class="form-control input-sm myinput-sm"
+                                    ng-model="reposicion.fecha"
+                                    ng-change="setIsEdited()"
+                                    ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Caja chica </label>
+                                <select class="form-control input-sm myinput-sm"
+                                        ng-model="reposicion.cajaChica"
+                                        ng-options="item.cajaChica as item.descripcion for item in cajasChicas | orderBy:'descripcion'"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-centered"></div>
+                        <div class="col-sm-3 col-centered">
+                            <div class="form-group">
+                                <label>Estado actual</label>
+                                <select class="form-control input-sm myinput-sm"
+                                        ng-model="reposicion.estadoActual"
+                                        ng-options="item.estado as item.descripcion for item in estadosCajaChicaArray"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row row-centered">
+                        <div class="col-sm-7 col-centered">
+                            <div class="form-group">
+                                <label>Observaciones </label>
+                                <textarea class="form-control input-sm myinput-sm"
+                                        rows="2"
+                                        ng-model="reposicion.observaciones"
+                                        ng-change="setIsEdited()"
+                                        ng-model-options="{ updateOn: 'blur' }" >
+                                </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <br />
+
+            <div class="row row-centered">
+                <div class="col-sm-8 col-centered">
+                    <span style="color: #004776; font-size: medium; ">Registro de gastos: </span>
+                    <hr style="margin-top: 0; " class="blueLine">
+                </div>
+            </div>
+
+            <div class="row" style="text-align: center; ">
+                <div class="col-sm-10 col-centered">
+            
+                    <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                        <div class="container-fluid">
+                            <div class="navbar-collapse collapse">
+                                <ul class="nav navbar-nav">
+                                    <li><a class="navbar_custom_small_header">Gastos de la reposición de caja chica</a></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoGasto()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                    <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="calcularGastos()" ng-if="origen=='edicion'">Calcular <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+            
+                    <div ui-grid="gastos_ui_grid" 
+                            ui-grid-edit
+                            ui-grid-cellnav
+                            ui-grid-resize-columns
+                            ui-grid-selection
+                            ui-grid-pinning
+                            class="angularGrid"
+                            style="height: 350px; width: 100%; text-align: center; ">
+                    </div>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+</div>

@@ -1,0 +1,122 @@
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-10 col-sm-offset-1">
+        <h4>Indique el período para el cual desea generar movimientos itf ...</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0">
+
+        <form name="filtroForm"
+            id="filtroForm"
+            ng-submit="submit_filtroForm()"
+            role="form"
+            novalidate>
+
+            <div class="row">
+
+                <div class="col-sm-2 col-sm-offset-1" style="text-align: left; ">
+                    <div class="form-group">
+                        <label for="desde" class="myinput-sm">Desde</label>
+                        <input type="date"
+                                id="desde"
+                                name="desde"
+                                class="form-control input-sm myinput-xsm"
+                                ng-model="parametros.desde"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                required
+                                style="width: 135px; " />
+
+                        <div class="validation-message myinput-xsm"
+                            ng-show="submitted && filtroForm.desde.$error.required">
+                            Indique un valor.
+                        </div>
+
+                        <div class="validation-message myinput-xsm"
+                            ng-show="submitted && filtroForm.desde.$error.date">
+                            Valor inválido.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-2 col-sm-offset-0" style="text-align: left; ">
+                    <div class="form-group">
+                        <label for="hasta" class="myinput-sm">Hasta</label>
+                        <input type="date"
+                                id="hasta"
+                                name="hasta"
+                                class="form-control input-sm myinput-xsm"
+                                ng-model="parametros.hasta"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                required
+                                style="width: 135px; " />
+
+                        <div class="validation-message myinput-xsm"
+                            ng-show="submitted && filtroForm.desde.$error.required">
+                            Indique un valor.
+                        </div>
+
+                        <div class="validation-message myinput-xsm"
+                            ng-show="submitted && filtroForm.desde.$error.date">
+                            Valor inválido.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 col-sm-offset-1" style="text-align: left; ">
+                    <div class="form-group">
+                        <label class="control-label input-label pull-left" for="cuentasBancarias">Cuentas bancarias: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="cuentasBancarias"
+                                id="cuentasBancarias"
+                                ng-model="parametros.cuentasBancarias"
+                                ng-options="item.cuentaInterna as item.cuentaBancaria for item in cuentasBancarias2 | orderBy:'cuentaBancaria'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple"></select>
+                    </div>
+                </div>
+
+                <div class="col-sm-1 col-sm-offset-1" style="text-align: left; ">
+                    <!-- <button type="submit" form="filtroForm" class="btn btn-sm pull-right btn-primary" style="margin-right: 15px; ">
+                        Aplicar filtro
+                    </button> -->
+                </div>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-1 col-sm-offset-9" style="text-align: left; ">
+        <button type="submit" form="filtroForm" class="btn btn-sm pull-right btn-primary" style="margin-right: 15px; ">
+            Aplicar filtro
+        </button>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+
+<!-- nótese como mostramos el navbar solo cuando la página no viene de afuera ...
+vieneDeAfuera es true cuando una página, como factura, es abierta desde otro módulo en contab, como pagos ...  -->﻿﻿
+<div class="navbar navbar-fixed-top navbar-default" ng-hide="vieneDeAfuera">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/nomina" style="font-style: italic; color: #02008D; ">nómina</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Catálogos <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="nomina.cargos">Cargos</a></li>
+                        <li><a ui-sref="nomina.departamentos">Departamentos</a></li>
+                        <li><a ui-sref="nomina.paises">Países</a></li>
+                        <li><a ui-sref="nomina.bancos">Bancos</a></li>
+                        <li><a ui-sref="nomina.rubros">Rubros</a></li>
+                        <li><a ui-sref="nomina.parentescos">Parentescos</a></li>
+                        <li><a ui-sref="nomina.tiposCuentaBancaria">Tipos de cuenta bancaria</a></li>
+                        <li><a ui-sref="nomina.gruposEmpleados">Grupos de empleados</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="nomina.companias">Compañías</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="nomina.parametros">Parámetros de nómina</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Empleados <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="nomina.empleados.filter({ origen: 'edicion' })">Edición</a></li>
+                        <li><a ui-sref="nomina.empleados.filter({ origen: 'consulta' })">Consulta</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href=" #" class="dropdown-toggle" data-toggle="dropdown">Nómina <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+                        <li><a ui-sref="nomina.rubrosAsignados">Rubros asignados</a></li>
+
+                        <li class="dropdown dropdown-submenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Vacaciones</a>
+                            <ul class="dropdown-menu">
+                                <li><a ui-sref="nomina.vacaciones.filter({ origen: 'edicion' })">Edición</a></li>
+                                <li><a ui-sref="nomina.vacaciones.filter({ origen: 'consulta' })">Consulta</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Generales <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="nomina.SeleccionarCompania">Seleccionar una compañía</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="nomina.CopiarCatalogos">Copiar catálogos&nbsp;&nbsp;<span class="fa fa-clone"></span></a></li>
+                        <li><a ui-sref="nomina.registrarFiles">Registrar archivos&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="nomina.generales_copiarVacacionesDesdeSqlServer">Copiar vacaciones</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/" > <i class="fa fa-home fa-lg"></i></a></li>
+                <li><a href="#" ng-click="mostrarHelp()"> <i class="fa fa-question fa-lg"></i></a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div class="container body-content">
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                <!--<span ng-bind-html="alert.msg | unsafe"></span>-->
+                <span ng-bind-html="alert.msg"></span>
+            </alert>
+        </div>
+    </div>
+
+    <div class="row">
+        <div ui-view class="ui-viewBorder"></div>
+    </div>
+</div>

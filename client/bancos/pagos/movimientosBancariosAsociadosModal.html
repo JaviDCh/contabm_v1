@@ -1,0 +1,76 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Bancos - Pagos - Movimientos bancarios asociados</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+
+                <div class="col-sm-4" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                  <table style="font-size: x-small; " class="table table-condensed table-striped table-bordered table-hover table-responsive">
+                      <thead>
+                          <tr>
+                              <th style="text-align: center; ">Tipo</th>
+                              <th style="text-align: center; ">Fecha</th>
+                              <th style="text-align: left; ">Número</th>
+                              <th style="text-align: left; ">Compañía</th>
+                              <th style="text-align: left; ">Beneficiario</th>
+                              <th style="text-align: left; ">Concepto</th>
+                              <th style="text-align: right; ">Monto</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="movimientoBancario in movimientosBancariosAsociadosList">
+                              <td style="text-align: center; ">{{ movimientoBancario.tipo }}</td>
+                              <td style="text-align: center; ">{{ movimientoBancario.fecha }}</td>
+                              <td style="text-align: left; ">
+                                  <a href="#" ng-click="mostrarMovimientoBancarioSeleccionado(movimientoBancario.claveUnica)">{{ movimientoBancario.transaccion }}</a>
+                              </td>
+                              <td style="text-align: left; ">{{ movimientoBancario.nombreCompania }}</td>
+                              <td style="text-align: left; ">
+                                  <a href="#" ng-click="mostrarMovimientoBancarioSeleccionado(movimientoBancario.claveUnica)">{{ movimientoBancario.beneficiario }}</a>
+                              </td>
+                              <td style="text-align: left; ">
+                                  <a href="#" ng-click="mostrarMovimientoBancarioSeleccionado(movimientoBancario.claveUnica)">{{ movimientoBancario.concepto }}</a>
+                              </td>
+                              <td style="text-align: right; ">{{ movimientoBancario.monto | currencyFilter }}</td>
+                          </tr>
+                      </tbody>
+                      <tfoot>
+                      </tfoot>
+                  </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button ng-if="origen == 'edicion'" ng-click="agregarMovimientoBancario()" class="btn btn-sm btn-primary">Agregar movimiento bancario</button>
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; ">Cerrar</button>
+</div>

@@ -1,0 +1,241 @@
+
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4>Contab - Reconversión monetaria</h4>
+    </div>
+    <div style="text-align: right; font-style: italic; ">
+        <span style="color: dodgerblue">{{ companiaSeleccionada.nombreCorto }}</span>
+    </div>
+
+    <div ui-view></div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row">
+    <tabset style="text-align: left; ">
+        <tab heading="Filtro">
+            <div class="row">
+
+                <form name="form.filtroForm" 
+                      id="form.filtroForm"
+                    ng-submit="submit_filtroForm()"
+                    role="form"
+                    style="margin-top: 15px; "
+                    novalidate>
+    
+                    <div class="container-fluid">
+    
+                        <div class="row row-centered">
+                            <!-- monedas -->
+                            <div class="col-sm-3 col-centered">
+                                <label class="control-label input-label pull-left" for="monedas">Monedas: </label>
+                                <select class="form-control input-sm myinput-sm"
+                                        name="moneda"
+                                        ng-model="filtro.moneda"
+                                        ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        size="10"
+                                        required
+                                        multiple="multiple">
+                                </select>
+
+                                <div class="validation-message myinput-xsm" ng-show="submitted && form.filtroForm.moneda.$error.required">
+                                    Ud. debe seleccionar un (varios) valor en esta lista.
+                                </div>
+                            </div>
+                
+                            <!-- cuenta contable -->
+                            <div class="col-sm-5 col-centered">
+                                <div class="form-group">
+                                    <label>Cuenta contable </label>
+                                    <select class="form-control input-sm myinput-sm"
+                                            name="cuentaContable"
+                                            ng-model="filtro.cuentaContable"
+                                            ng-options="item.id as item.cuentaDescripcionCia for item in cuentasContablesLista"
+                                            ng-change="setIsEdited()"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            size="10"
+                                            required
+                                            multiple="multiple">
+                                    </select>
+
+                                    <div class="validation-message myinput-xsm" ng-show="submitted && form.filtroForm.cuentaContable.$error.required">
+                                        Ud. debe seleccionar un valor en esta lista.
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <div class="col-sm-2 col-centered">
+                                <!-- años -->
+                                <label class="control-label input-label pull-left" for="anos">Años: </label>
+                                <select class="form-control input-sm myinput-sm"
+                                        name="ano"
+                                        ng-model="filtro.ano"
+                                        ng-options="item as item for item in anosArray"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        size="10"
+                                        required
+                                        multiple="multiple">
+                                </select>
+
+                                <div class="validation-message myinput-xsm" ng-show="submitted && form.filtroForm.ano.$error.required">
+                                    Ud. debe seleccionar un valor en esta lista.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <!-- dividirPor -->
+                            <div class="col-sm-3 col-centered">
+                                <label class="control-label input-label pull-left" for="monedas">Dividir por: </label>
+                                <input class="form-control input-sm myinput-sm"
+                                        type="number" 
+                                        name="dividirPor"
+                                        ng-model="filtro.dividirPor"
+                                        ng-model-options="{ updateOn: 'blur' }"
+                                        required>
+                                </select>
+
+                                <div class="validation-message myinput-xsm"
+                                    ng-show="submitted && form.filtroForm.dividirPor.$error.required">
+                                    Ud. debe indicar un valor (ej: 1000).
+                                </div>
+
+                                <div class="validation-message myinput-xsm" ng-show="submitted && form.filtroForm.dividirPor.$error.number">
+                                    Valor inválido. Debe ser un número.
+                                </div>
+                            </div>
+                
+                            <div class="col-sm-5 col-centered">
+                            </div>
+                
+                            <div class="col-sm-2 col-centered">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="row row-centered">
+                <div class="col-sm-10 col-centered">
+                    <hr class="blueLine" />
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <div class="col-sm-3 col-centered">
+                    <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; ">
+                        Limpiar filtro
+                    </a>
+                </div>
+                
+                <div class="col-sm-4 col-centered">
+                </div>
+                
+                <div class="col-sm-3 col-centered">
+                    <button type="submit" form="form.filtroForm" class="btn btn-sm pull-right btn-primary" style="min-width: 80px; margin-left: 20px; ">
+                        Grabar filtro
+                    </button>
+                </div>
+            </div>
+        </tab>
+    
+        <tab heading="Reconvertir">
+            <br />
+            <div class="row row-centered">
+                <div class="col-sm-10 col-centered">
+                    <p>
+                        Este proceso lee las cifras que corresponden al <em>filtro</em> que se ha registrado, y las divide por el monto 
+                        que el usuario ha indicado en el mismo. 
+                    </p>
+                    <p>
+                        Nótese que el filtro registrado es importante en la ejecución de este paso. <b>Solo</b> las cifras que corresponden 
+                        al año y moneda (s) indicados, son reconvertidos. Para reconvertir, el proceso, simplemente, divide las cifras 
+                        de la contabilidad por el monto indicado en el <em>filtro</em>. 
+                    </p>
+                    <p>
+                        Las cifras más importantes que este proceso reconvierte son dos: <em>asientos</em> y <em>saldos contables</em>. 
+                        Luego, ambas necesitan ser <em>ajustadas</em>, pero eso se hace en los pasos próximos a éste. 
+                    </p>
+                    <p>
+                        <b>Nota importante:</b> este proceso no debe ser ejecutado más de una vez para las cifras que corresponden 
+                        al filtro registrado. De hacerlo, estas serían divididas por el monto más de una vez. 
+                        Si el usuario desea ejecutar este proceso más de una vez para las mismas cifras, deberá restituir las mismas 
+                        desde un respaldo que se haya tomado <b>antes de haber ejecutado el proceso</b>. 
+                    </p>
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <div class="col-sm-10 col-centered">
+                    <hr class="blueLine" />
+                </div>
+            </div>
+
+            <div class="row row-centered">
+                <div class="col-sm-10 col-centered">
+                    <button ng-click="reconvertir()"class="btn btn-sm pull-right btn-primary" style="min-width: 80px; margin-left: 20px; ">
+                        Reconvertir
+                    </button>
+                </div>
+            </div>
+        </tab>
+    
+        <tab heading="Saldos contables - ajustar">
+            
+        </tab>
+    
+        <tab heading="Asientos contables - ajustar">
+            <br />
+            <div class="row" style="font-size: small; ">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <fieldset class="scheduler-border" style="text-align: left; ">
+                        <legend class="scheduler-border">Excluir de la consulta: </legend>
+                        <div class="row">
+                            <!-- excluirCuentasContables_saldosMesesEnCero -->
+                            <div class="col-sm-10 col-offset-1">
+                                <div class="form-group">
+                                    <label style="font-weight: normal; ">
+                                        <input type="checkbox"
+                                               ng-model="filtro.excluirCuentasContables_saldosMesesEnCero"
+                                               ng-change="setIsEdited()">
+                                        Cuentas contables cuyos saldos de todos los meses sean cero
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </tab>
+
+        <tab heading="Log">
+            <br />
+            <div class="row row-centered">
+    
+            </div>
+        </tab>
+    
+    </tabset>
+</div>

@@ -1,0 +1,722 @@
+
+
+<div>
+
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li ng-if="vacacion.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Vacaciones</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!vacacion.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Vacaciones</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+                    <!-- <li class="divider-vertical-small"></li> -->
+                    <!-- <li><a href="#" ng-click="imprimir()" class="navbar_custom_small_node">Imprimir&nbsp;&nbsp;<span class="fa fa-print"></span></a></li> -->
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="calcular()" class="navbar_custom_small_node">Calcular&nbsp;&nbsp;<span class="fa fa-gears"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabarRegistroNomina0()" class="navbar_custom_small_node">Grabar nómina&nbsp;&nbsp;<span class="fa fa-database"></span></a></li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <form role="form"
+              name="vacacionesForm"
+              novalidate
+              style="margin-top: 15px; text-align: left; font-size: small; ">
+
+              <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                  <span style="color: #004776; font-size: medium; ">Datos del empleado: </span>
+                  <hr style="margin-top: 0; " class="blueLine">
+              </div>
+
+              <div class="row row-centered">
+                  <div class="col-sm-3 col-centered">
+                      <!-- empleado -->
+                      <div class="form-group">
+                          <label for="empleado">Empleado</label>
+                          <select class="form-control input-sm myinput-sm"
+                                  name="empleado"
+                                  id="empleado"
+                                  ng-model="vacacion.empleado"
+                                  ng-options="item.empleado as item.nombre for item in empleados | orderBy:'nombre'"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- grupoNomina -->
+                  <div class="col-sm-3 col-centered">
+                      <div class="form-group">
+                          <label for="grupoNomina">Grupo de nómina</label>
+                          <select class="form-control input-sm myinput-sm grisBackground"
+                                  name="grupoNomina"
+                                  id="grupoNomina"
+                                  ng-model="vacacion.grupoNomina"
+                                  ng-options="item.grupo as item.descripcion for item in gruposEmpleados | orderBy:'descripcion'"
+                                  ng-change="setIsEdited()"
+                                  ng-model-options="{ updateOn: 'blur' }">
+                          </select>
+                      </div>
+                  </div>
+                  <!-- fechaIngreso -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label>F ingreso</label><br />
+                          <span  style="color: #337AB7; font-weight: bold; ">
+                              {{ vacacion.fechaIngreso | date:'dd-MMM-yyyy' }}
+                          </span>
+                      </div>
+                  </div>
+                  <!-- sueldo -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label>Sueldo</label><br />
+                          <span  style="color: #337AB7; font-weight: bold; ">
+                              {{ vacacion.sueldo | number:2  }}
+                          </span>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                  <span style="color: #004776; font-size: medium; ">Período de disfrute: </span>
+                  <hr style="margin-top: 0; " class="blueLine">
+              </div>
+
+              <div class="row row-centered">
+                  <!-- salida -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label for="salida">Desde</label>
+                          <input type="date"
+                                 name="salida"
+                                 id="salida"
+                                 class="form-control input-sm"
+                                 ng-model="vacacion.salida"
+                                 ng-change="setIsEdited('salida')"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- regreso -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label for="regreso">Hasta</label>
+                          <input type="date"
+                                 name="regreso"
+                                 id="regreso"
+                                 class="form-control input-sm"
+                                 ng-model="vacacion.regreso"
+                                 ng-change="setIsEdited('regreso')"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasDisfrute_Feriados -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasDisfrute_Feriados">Feriados</label>
+                          <input type="number"
+                                 name="cantDiasDisfrute_Feriados"
+                                 id="cantDiasDisfrute_Feriados"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasDisfrute_Feriados"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasDisfrute_SabDom -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasDisfrute_SabDom">Sab/Dom</label>
+                          <input type="number"
+                                 name="cantDiasDisfrute_SabDom"
+                                 id="cantDiasDisfrute_SabDom"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasDisfrute_SabDom"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasDisfrute_Habiles -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasDisfrute_Habiles">Hábiles</label>
+                          <input type="number"
+                                 name="cantDiasDisfrute_Habiles"
+                                 id="cantDiasDisfrute_Habiles"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasDisfrute_Habiles"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasDisfrute_Total -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasDisfrute_Total">Total</label>
+                          <input type="number"
+                                 name="cantDiasDisfrute_Total"
+                                 id="cantDiasDisfrute_Total"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasDisfrute_Total"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- fechaReintegro -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label for="fechaReintegro">Reintegro</label>
+                          <input type="date"
+                                 name="fechaReintegro"
+                                 id="fechaReintegro"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.fechaReintegro"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+              </div>
+
+
+              <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                  <span style="color: #004776; font-size: medium; ">Pago de vacaciones: </span>
+                  <hr style="margin-top: 0; " class="blueLine">
+              </div>
+
+              <div class="row row-centered">
+                  <!-- periodoPagoDesde -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label for="periodoPagoDesde">Desde</label>
+                          <input type="date"
+                                 name="periodoPagoDesde"
+                                 id="periodoPagoDesde"
+                                 class="form-control input-sm"
+                                 ng-model="vacacion.periodoPagoDesde"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- periodoPagoHasta -->
+                  <div class="col-sm-2 col-centered">
+                      <div class="form-group">
+                          <label for="periodoPagoHasta">Hasta</label>
+                          <input type="date"
+                                 name="periodoPagoHasta"
+                                 id="periodoPagoHasta"
+                                 class="form-control input-sm"
+                                 ng-model="vacacion.periodoPagoHasta"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasPago_Feriados -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasPago_Feriados">Feriados</label>
+                          <input type="number"
+                                 name="cantDiasPago_Feriados"
+                                 id="cantDiasPago_Feriados"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasPago_Feriados"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasPago_SabDom -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasPago_SabDom">Sab/Dom</label>
+                          <input type="number"
+                                 name="cantDiasPago_SabDom"
+                                 id="cantDiasPago_SabDom"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasPago_SabDom"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasPago_Habiles -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasPago_Habiles">Hábiles</label>
+                          <input type="number"
+                                 name="cantDiasPago_Habiles"
+                                 id="cantDiasPago_Habiles"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasPago_Habiles"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasPago_YaTrabajados -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasPago_YaTrabajados">Devengados</label>
+                          <input type="number"
+                                 name="cantDiasPago_YaTrabajados"
+                                 id="cantDiasPago_YaTrabajados"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasPago_YaTrabajados"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+                  <!-- cantDiasPago_Total -->
+                  <div class="col-sm-1 col-centered">
+                      <div class="form-group">
+                          <label for="cantDiasPago_Total">Total</label>
+                          <input type="number"
+                                 name="cantDiasPago_Total"
+                                 id="cantDiasPago_Total"
+                                 class="form-control grisBackground input-sm"
+                                 tabindex="-1"
+                                 ng-model="vacacion.cantDiasPago_Total"
+                                 ng-change="setIsEdited()"
+                                 ng-required="true"
+                                 ng-model-options="{ updateOn: 'blur' }" />
+                      </div>
+                  </div>
+              </div>
+
+                <div class="row row-centered">
+                    <!-- aplicarDeduccionesFlag -->
+                    <div class="col-sm-5 col-centered">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="vacacion.aplicarDeduccionesFlag"
+                                       ng-change="setIsEdited()">
+                                Calcular y aplicar deducciones legales (sso, lph, pf, ...)
+                            </label>
+                        </div>
+                    </div>
+                    <!-- cantDiasDeduccion -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="cantDiasDeduccion">Cant días</label>
+                            <input type="number"
+                                   name="cantDiasDeduccion"
+                                   id="cantDiasDeduccion"
+                                   class="form-control input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.cantDiasDeduccion"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                    <span style="color: #004776; font-size: medium; ">Bono vacacional: </span>
+                    <hr style="margin-top: 0; " class="blueLine">
+                </div>
+
+                <div class="row row-centered">
+                    <!-- baseBonoVacacional -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="baseBonoVacacional">Base</label>
+                            <input type="number"
+                                   name="baseBonoVacacional"
+                                   id="baseBonoVacacional"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.baseBonoVacacional"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- cantDiasPago_Bono -->
+                    <div class="col-sm-1 col-centered">
+                        <div class="form-group">
+                            <label for="cantDiasPago_Bono">Bono</label>
+                            <input type="number"
+                                   name="cantDiasPago_Bono"
+                                   id="cantDiasPago_Bono"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.cantDiasPago_Bono"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- montoBono -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="montoBono">Monto bono</label>
+                            <input type="number"
+                                   name="montoBono"
+                                   id="montoBono"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.montoBono"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                    <span style="color: #004776; font-size: medium; ">Nómina de vacaciones (ejecución): </span>
+                    <hr style="margin-top: 0; " class="blueLine">
+                </div>
+
+                <div class="row row-centered">
+                    <!-- fechaNomina -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="fechaNomina">Fecha</label>
+                            <input type="date"
+                                   name="fechaNomina"
+                                   id="fechaNomina"
+                                   class="form-control grisBackground input-sm"
+                                   ng-model="vacacion.fechaNomina"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- obviarEnLaNominaFlag -->
+                    <div class="col-sm-4 col-centered">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="vacacion.obviarEnLaNominaFlag"
+                                       ng-change="setIsEdited()">
+                                Excluir en nóminas normales
+                            </label>
+                        </div>
+                    </div>
+                    <!-- desactivarNominaDesde -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="desactivarNominaDesde">Desde</label>
+                            <input type="date"
+                                   name="desactivarNominaDesde"
+                                   id="desactivarNominaDesde"
+                                   class="form-control grisBackground input-sm"
+                                   ng-model="vacacion.desactivarNominaDesde"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- desactivarNominaHasta -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="desactivarNominaHasta">Hasta</label>
+                            <input type="date"
+                                   name="desactivarNominaHasta"
+                                   id="desactivarNominaHasta"
+                                   class="form-control grisBackground input-sm"
+                                   ng-model="vacacion.desactivarNominaHasta"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                    <span style="color: #004776; font-size: medium; ">Próxima nómina de pago: </span>
+                    <hr style="margin-top: 0; " class="blueLine">
+                </div>
+
+                <div class="row row-centered">
+                    <!-- proximaNomina_FechaNomina -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="proximaNomina_FechaNomina">Fecha</label>
+                            <input type="date"
+                                   name="proximaNomina_FechaNomina"
+                                   id="proximaNomina_FechaNomina"
+                                   class="form-control grisBackground input-sm"
+                                   ng-model="vacacion.proximaNomina_FechaNomina"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- proximaNomina_AplicarDeduccionPorAnticipo -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="vacacion.proximaNomina_AplicarDeduccionPorAnticipo"
+                                       ng-change="setIsEdited()">
+                                Aplicar deducción por anticipo
+                            </label>
+                        </div>
+                    </div>
+                    <!-- proximaNomina_AplicarDeduccionPorAnticipo_CantDias -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="proximaNomina_AplicarDeduccionPorAnticipo_CantDias">Cant días</label>
+                            <input type="number"
+                                   name="proximaNomina_AplicarDeduccionPorAnticipo_CantDias"
+                                   id="proximaNomina_AplicarDeduccionPorAnticipo_CantDias"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.proximaNomina_AplicarDeduccionPorAnticipo_CantDias"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- proximaNomina_AplicarDeduccionesLegales -->
+                    <div class="col-sm-3 col-centered">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox"
+                                       ng-model="vacacion.proximaNomina_AplicarDeduccionesLegales"
+                                       ng-change="setIsEdited()">
+                                Aplicar deducciones legales
+                            </label>
+                        </div>
+                    </div>
+                    <!-- proximaNomina_AplicarDeduccionesLegales_CantDias -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="proximaNomina_AplicarDeduccionesLegales_CantDias">Cant días</label>
+                            <input type="number"
+                                   name="proximaNomina_AplicarDeduccionesLegales_CantDias"
+                                   id="proximaNomina_AplicarDeduccionesLegales_CantDias"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.proximaNomina_AplicarDeduccionesLegales_CantDias"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                    <span style="color: #004776; font-size: medium; ">Año de vacaciones: </span>
+                    <hr style="margin-top: 0; " class="blueLine">
+                </div>
+
+                <div class="row row-centered">
+                    <!-- anoVacaciones -->
+                    <div class="col-sm-1 col-centered">
+                        <div class="form-group">
+                            <label for="anoVacaciones">Año</label>
+                            <input type="number"
+                                   name="anoVacaciones"
+                                   id="anoVacaciones"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.anoVacaciones"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- numeroVacaciones -->
+                    <div class="col-sm-1 col-centered">
+                        <div class="form-group">
+                            <label for="numeroVacaciones">#</label>
+                            <input type="number"
+                                   name="numeroVacaciones"
+                                   id="numeroVacaciones"
+                                   class="form-control grisBackground input-sm"
+                                   tabindex="-1"
+                                   ng-model="vacacion.numeroVacaciones"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- anoVacacionesDesde -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="anoVacacionesDesde">Desde</label>
+                            <input type="date"
+                                   name="anoVacacionesDesde"
+                                   id="anoVacacionesDesde"
+                                   class="form-control grisBackground input-sm"
+                                   ng-model="vacacion.anoVacacionesDesde"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                    <!-- anoVacacionesHasta -->
+                    <div class="col-sm-2 col-centered">
+                        <div class="form-group">
+                            <label for="anoVacacionesHasta">Hasta</label>
+                            <input type="date"
+                                   name="anoVacacionesHasta"
+                                   id="anoVacacionesHasta"
+                                   class="form-control grisBackground input-sm"
+                                   ng-model="vacacion.anoVacacionesHasta"
+                                   ng-change="setIsEdited()"
+                                   ng-required="true"
+                                   ng-model-options="{ updateOn: 'blur' }" />
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" style="padding-right: 20px; padding-left: 20px; ">
+                    <span style="color: #004776; font-size: medium; ">Control de vacaciones: </span>
+                    <hr style="margin-top: 0; " class="blueLine">
+                </div>
+
+
+                <div class="row row-centered">
+
+                    <div class="col-sm-3 col-centered">
+                        <fieldset class="scheduler-border" style="text-align: left; ">
+                            <legend class="scheduler-border">Años anteriores: </legend>
+                            <!-- cantDiasVacPendAnosAnteriores -->
+                            <div class="col-sm-10 col-centered">
+                                <div class="form-group">
+                                    <label for="cantDiasVacPendAnosAnteriores">Días pendientes</label>
+                                    <input type="number"
+                                           name="cantDiasVacPendAnosAnteriores"
+                                           id="cantDiasVacPendAnosAnteriores"
+                                           class="form-control grisBackground input-sm"
+                                           tabindex="-1"
+                                           ng-model="vacacion.cantDiasVacPendAnosAnteriores"
+                                           ng-change="setIsEdited()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-sm-8 col-centered">
+                        <fieldset class="scheduler-border" style="text-align: left; ">
+                            <legend class="scheduler-border">Días pendientes - este año: </legend>
+                            <!-- cantDiasVacSegunTabla -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="cantDiasVacSegunTabla">Según tabla</label>
+                                    <input type="number"
+                                           name="cantDiasVacSegunTabla"
+                                           id="cantDiasVacSegunTabla"
+                                           class="form-control grisBackground input-sm"
+                                           tabindex="-1"
+                                           ng-model="vacacion.cantDiasVacSegunTabla"
+                                           ng-change="setIsEdited()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                            <!-- cantDiasVacDisfrutadosAntes -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="cantDiasVacDisfrutadosAntes">Antes</label>
+                                    <input type="number"
+                                           name="cantDiasVacDisfrutadosAntes"
+                                           id="cantDiasVacDisfrutadosAntes"
+                                           class="form-control grisBackground input-sm"
+                                           tabindex="-1"
+                                           ng-model="vacacion.cantDiasVacDisfrutadosAntes"
+                                           ng-change="setIsEdited()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                            <!-- cantDiasVacDisfrutadosAhora -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="cantDiasVacDisfrutadosAhora">Ahora</label>
+                                    <input type="number"
+                                           name="cantDiasVacDisfrutadosAhora"
+                                           id="cantDiasVacDisfrutadosAhora"
+                                           class="form-control grisBackground input-sm"
+                                           tabindex="-1"
+                                           ng-model="vacacion.cantDiasVacDisfrutadosAhora"
+                                           ng-change="setIsEdited()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                            <!-- cantDiasVacPendientes -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="cantDiasVacPendientes">Pendientes</label>
+                                    <input type="number"
+                                           name="cantDiasVacPendientes"
+                                           id="cantDiasVacPendientes"
+                                           class="form-control grisBackground input-sm"
+                                           tabindex="-1"
+                                           ng-model="vacacion.cantDiasVacPendientes"
+                                           ng-change="setIsEdited()"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                </div>
+          </form>
+    </div>
+</div>

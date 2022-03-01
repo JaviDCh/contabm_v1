@@ -1,0 +1,62 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Exportar a Excel</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-6 col-sm-offset-6" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <ol>
+                    <li>Puede indicar un sub título para la consulta:
+                        <input type="text"
+                               class="form-control"
+                               ng-model="filtro.subTitulo"
+                               ng-model-options="{ updateOn: 'blur' }" />
+                    </li>
+                    <li>Haga un <em>click</em> en <em>Construir documento</em></li>
+                    <li>Espere que el proceso que genera el documento temine</li>
+                    <li>Haga un <em>click</em> en el <em>link</em> que se mostrará abajo, para obtener el documento (download)</li>
+
+                    <li ng-if="downloadDocument">
+                        <a href="{{downLoadLink}}" target="_self" download>{{ selectedFile }}</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button ng-click="exportarAExcel()" class="btn btn-sm btn-primary" style="min-width: 80px; ">Construir documento</button>
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; min-width: 80px; ">Cerrar</button>
+</div>

@@ -1,0 +1,99 @@
+<!-- nótese como mostramos el navbar solo cuando la página no viene de afuera ...
+vieneDeAfuera es true cuando una página, como factura, es abierta desde otro módulo en contab, como pagos ...  -->﻿
+<div class="navbar navbar-fixed-top navbar-default" ng-hide="vieneDeAfuera">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/contab" style="font-style: italic; color: #02008D; ">contab</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ng-if="userHasRole(['contab_catalogos'])" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Catálogos <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="contab.monedas">Monedas</a></li>
+                        <li><a ui-sref="contab.cuentasContables">Cuentas contables</a></li>
+                        <li><a ui-sref="contab.gruposContables">Grupos contables</a></li>
+                        <li><a ui-sref="contab.mesesDelAnoFiscal">Meses del año fiscal</a></li>
+                        <li><a ui-sref="contab.centrosCosto">Centros de costo</a></li>
+                        <li><a ui-sref="contab.parametrosContab">Parámetros</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.codificacionesContables">Codificaciones contables</a></li>
+                        <li><a ui-sref="contab.parametrosContab">Parámetros</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.activosFijos">Activos fijos</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.companias">Compañías</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.filtrosConsultasContab">Filtros de consultas</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown"  ng-if="userHasRole(['contab_asientos', 'contab_asientos_consulta'])">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Asientos contables <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-if="userHasRole(['contab_asientos'])"><a ui-sref="contab.asientosContables.filter({ origen: 'edicion' })">Edición</a></li>
+                        <li ng-if="userHasRole(['contab_asientos_consulta'])"><a ui-sref="contab.asientosContables.filter({ origen: 'consulta' })">Consulta</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown" ng-if="userHasRole(['contab_consultas', 'contab_consultas_codificacionesContables'])">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Consultas <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-if="userHasRole(['contab_consultas'])"><a ui-sref="contab.consulta_cuentasYMovimientos.filtro">Cuentas y sus movimientos</a></li>
+                        <li ng-if="userHasRole(['contab_consultas'])"><a ui-sref="contab.consulta_saldos.filtro">Saldos</a></li>
+                        <li class="divider" ng-if="userHasRole(['contab_consultas']) && userHasRole(['contab_consultas_codificacionesContables'])"></li>
+                        <li ng-if="userHasRole(['contab_consultas_codificacionesContables'])"><a ui-sref="contab.consulta_codificacionesContables">Codificaciones contables</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cierres <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-if="userHasRole(['contab_cierres'])"><a ui-sref="contab.cierre">Cierre</a></li>
+                        <li><a ui-sref="contab.ultimoMesCerrado">Ultimo mes cerrado</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Generales <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="contab.SeleccionarCompania">Seleccionar una compañía</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.CopiarCatalogos">Copiar catálogos</a></li>
+                        <li><a ui-sref="contab.PersistirCuentasContables">Persistir cuentas contables</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="contab.reconversionMonetaria">Reconversión monetaria</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/" > <i class="fa fa-home fa-lg"></i></a></li>
+                <li><a href="#" ng-click="mostrarHelp()"> <i class="fa fa-question fa-lg"></i></a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<div class="container body-content">
+
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+                <!--<span ng-bind-html="alert.msg | unsafe"></span>-->
+                <span ng-bind-html="alert.msg"></span>
+            </alert>
+        </div>
+    </div>
+
+    <div class="row">
+        <div ui-view class="ui-viewBorder"></div>
+    </div>
+</div>

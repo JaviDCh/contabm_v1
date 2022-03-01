@@ -1,0 +1,63 @@
+
+
+
+
+<div class="row">
+    <div class="col-sm-4">
+        <h4 style="margin: 0 0 0 30; color: #3183B9; text-align: left; ">Islr - Deducción - Definición</h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row" style="text-align: left; ">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <p>
+            Nota: para establecer un valor en el campo <em><b>tipo de nómina</b></em>, Ud. puede usar una o varias de estas letras: 
+            N (normal), Q (quincenal), M (mensual), U (utilidades), V (vacaciones), E (especial).
+        </p>
+        <p>
+            Si, por ejemplo, la deducción solo aplica a nóminas: normales, indique: N; si aplica a nóminas: normales, especiales y de
+            utilidades, indique: NEU; etc. Si aplica a cualquier tipo de nómina, utilice todas la letras: NQMUVE.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="row" style="text-align: center; ">
+    <div class="col-sm-12 col-sm-offset-0">
+
+        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a class="navbar_custom_small_header">Nómina - Parámetros - Deducción Islr </a></li>
+                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevo()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> 
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <div ui-grid="items_ui_grid"
+            ui-grid-edit
+            ui-grid-cellnav
+            ui-grid-resize-columns
+            ui-grid-selection
+            class="angularGrid"
+            style="height: 250px; width: 100%; ">
+        </div>
+    </div>
+</div>

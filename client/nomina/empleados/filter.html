@@ -1,0 +1,209 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <span style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<tabset style="text-align: left; ">
+    <tab heading="General">
+        <div class="row">
+            <form role="form" novalidate style="margin-top: 15px; ">
+
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <!-- Nombre -->
+                        <div class="col-sm-4 col-sm-offset-1">
+                            <div class="form-group">
+                                <label class="myinput-sm">Nombre: </label>
+                                <input type="text"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.nombre"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- fecha -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">F ingreso: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaIngreso1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaIngreso2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!--  -->
+                        <div class="col-sm-4 col-sm-offset-1">
+                        </div>
+                        <!-- fecha -->
+                        <div class="col-sm-6">
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">F retiro: </label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaRetiro1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-5 col-sm-offset-1">
+                                <div class="form-group">
+                                    <label class="control-label input-label">&nbsp;</label>
+                                    <input type="date"
+                                           class="form-control input-sm myinput-sm"
+                                           ng-model="filtro.fechaRetiro2" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </tab>
+
+    <tab heading="Listas">
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- tipos de asiento -->
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="cargos">Cargos: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="cargos"
+                                id="cargos"
+                                ng-model="filtro.cargos"
+                                ng-options="item.cargo as item.descripcion for item in cargos | orderBy:'descripcion'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple"></select>
+                    </div>
+
+                    <!-- proviene de -->
+                    <div class="col-sm-5 col-sm-offset-0">
+                        <label class="control-label input-label pull-left" for="departamentos">Departamentos: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="departamentos"
+                                id="departamentos"
+                                ng-model="filtro.departamentos"
+                                ng-options="item.departamento as item.descripcion for item in departamentos | orderBy:'descripcion'"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- monedas -->
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="estados">Estados: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="estados"
+                                id="estados"
+                                ng-model="filtro.estados"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                                <option value="A">Activo</option>
+                                <option value="S">Suspendido</option>
+                            </select>
+                    </div>
+
+                    <!-- monedas original -->
+                    <!-- proviene de -->
+                    <div class="col-sm-5 col-sm-offset-0">
+                        <label class="control-label input-label pull-left" for="situacionActual">Situacion actual: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="situacionActual"
+                                id="situacionActual"
+                                ng-model="filtro.situacionActual"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                                <option value="NO">Normal</option>
+                                <option value="VA">Vacaciones</option>
+                                <option value="RE">Retirado</option>
+                                <option value="LI">Liquidado</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-0">
+                <div class="form-group form-group-sm">
+                    <!-- tipos de asiento -->
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <label class="control-label input-label pull-left" for="tiposNomina">Tipos de nómina: </label>
+                        <select class="form-control input-sm myinput-sm"
+                                name="tiposNomina"
+                                id="tiposNomina"
+                                ng-model="filtro.tiposNomina"
+                                ng-model-options="{ updateOn: 'blur' }"
+                                size="8"
+                                multiple="multiple">
+                                <option value=1>Quincenal</option>
+                                <option value=2>Mensual</option>
+                                <option value=3>Otra</option>
+                            </select>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </tab>
+</tabset>
+
+
+<div class="row">
+    <hr class="blueLine" />
+
+    <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+        Limpiar filtro
+    </a>
+
+    <a href="#" ng-click="aplicarFiltroYAbrirLista()" class="btn btn-primary btn-sm pull-right" style="min-width: 80px; margin-left: 20px; ">
+        Aplicar filtro
+    </a>
+
+    <a href="#" ng-click="nuevo()" class="btn btn-default btn-sm pull-right" style="min-width: 80px; margin-right: 20px; " ng-if="origen == 'edicion'">
+        Nuevo
+    </a>
+</div>

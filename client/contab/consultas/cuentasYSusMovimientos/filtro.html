@@ -1,0 +1,239 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <div ng-show="processProgress.current != null" style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </div>
+            <div ng-show="processProgress.message" style="font-size: x-small; font-weight: bold; ">
+                ({{ processProgress.message }})
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <form role="form"
+          id="filtroForm"
+          name="filtroForm"
+          ng-submit="submitFiltroForm()"
+          novalidate
+          style="margin-top: 15px; ">
+
+            <tabset style="text-align: left; ">
+                <tab heading="General">
+                    <br />
+                    <div class="row">
+                        <!-- cuenta contable -->
+                        <div class="col-sm-3 col-sm-offset-1">
+                            <div class="form-group">
+                                <label class="myinput-sm">Cuenta contable: </label>
+                                <input type="text"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.cuentaContable"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+                        <!-- descripcion -->
+                        <div class="col-sm-3 col-sm-offset-0">
+                            <div class="form-group">
+                                <label class="control-label input-label">Descripción: </label>
+                                <input type="text"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.cuentaContableDescripcion"
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                        </div>
+
+                        <!-- desde -->
+                        <div class="col-sm-2 col-sm-offset-0">
+                            <div class="form-group">
+                                <label class="control-label input-label">Desde: </label>
+                                <input type="date"
+                                       name="desde"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.desde"
+                                       required
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                            <div class="validation-message myinput-xsm"
+                                 ng-show="submitted && filtroForm.desde.$error.required">
+                                Indique un valor.
+                            </div>
+                        </div>
+
+                        <!-- hasta -->
+                        <div class="col-sm-2 col-sm-offset-0">
+                            <div class="form-group">
+                                <label class="control-label input-label">Hasta: </label>
+                                <input type="date"
+                                       name="hasta"
+                                       class="form-control input-sm myinput-sm"
+                                       ng-model="filtro.hasta"
+                                       required
+                                       ng-model-options="{ updateOn: 'blur' }" />
+                            </div>
+                            <div class="validation-message myinput-xsm"
+                                 ng-show="submitted && filtroForm.hasta.$error.required">
+                                Indique un valor.
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+
+                <tab heading="Listas">
+                    <br />
+                    <div class="row row-centered">
+
+                        <!-- monedas -->
+                        <div class="col-sm-3 col-sm-offset-0 col-centered">
+                            <label class="control-label input-label pull-left" for="monedas">Monedas: </label>
+                            <select class="form-control input-sm myinput-sm"
+                                    name="monedas"
+                                    id="monedas"
+                                    ng-model="filtro.monedas"
+                                    ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                    ng-model-options="{ updateOn: 'blur' }"
+                                    size="8"
+                                    multiple="multiple"></select>
+                        </div>
+
+                        <!-- monedas originales -->
+                        <div class="col-sm-3 col-sm-offset-0 col-centered">
+                            <label class="control-label input-label pull-left" for="monedasOriginales">Moneda (original): </label>
+                            <select class="form-control input-sm myinput-sm"
+                                    name="monedasOriginales"
+                                    id="monedasOriginales"
+                                    ng-model="filtro.monedasOriginales"
+                                    ng-options="item.moneda as item.descripcion for item in monedas | orderBy:'descripcion'"
+                                    ng-model-options="{ updateOn: 'blur' }"
+                                    size="8"
+                                    multiple="multiple"></select>
+                        </div>
+
+                        <div class="col-sm-3 col-sm-offset-0 col-centered">
+                            <!-- gruposContables -->
+                            <label class="control-label input-label pull-left" for="gruposContables">Grupos contables: </label>
+                            <select class="form-control input-sm myinput-sm"
+                                    name="gruposContables"
+                                    id="gruposContables"
+                                    ng-model="filtro.gruposContables"
+                                    ng-options="item.grupo as item.descripcion for item in gruposContables | orderBy:'ordenBalanceGeneral'"
+                                    ng-model-options="{ updateOn: 'blur' }"
+                                    size="8"
+                                    multiple="multiple">
+                            </select>
+                        </div>
+                    </div>
+                </tab>
+
+                <tab heading="Opciones">
+                    <br />
+                    <div class="row" style="font-size: small; ">
+                        <div class="col-sm-6">
+                            <fieldset class="scheduler-border" style="text-align: left; ">
+                                <legend class="scheduler-border">Excluír cuentas contables: </legend>
+
+                                    <div class="row">
+                                        <!-- excluir_sinMovimientosEnElPeriodo -->
+                                        <div class="col-sm-9 col-offset-3">
+                                            <div class="form-group">
+                                                <label style="font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="filtro.excluir_sinMovimientosEnElPeriodo"
+                                                           ng-change="setIsEdited()">
+                                                    Sin movimientos en el período indicado
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- excluir_conSaldoCeroYSinMovimientos -->
+                                        <div class="col-sm-9 col-offset-3">
+                                            <div class="form-group">
+                                                <label style="font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="filtro.excluir_conSaldoCeroYSinMovimientos"
+                                                           ng-change="setIsEdited()">
+                                                    Con saldo cero y sin movimientos
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- excluir_conSaldoInicialYFinalEnCero -->
+                                        <div class="col-sm-9 col-offset-3">
+                                            <div class="form-group">
+                                                <label style="font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="filtro.excluir_conSaldoInicialYFinalEnCero"
+                                                           ng-change="setIsEdited()">
+                                                    Con saldo inicial y final (del período indicado) en cero
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- excluir_conSaldoFinalEnCero -->
+                                        <div class="col-sm-9 col-offset-3">
+                                            <div class="form-group">
+                                                <label style="font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="filtro.excluir_conSaldoFinalEnCero"
+                                                           ng-change="setIsEdited()">
+                                                    Con saldo final en cero
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <fieldset class="scheduler-border" style="text-align: left; ">
+                                <legend class="scheduler-border">Otros: </legend>
+                                    <div class="row">
+                                        <!-- excluir_sinMovimientosEnElPeriodo -->
+                                        <div class="col-sm-9 col-offset-3">
+                                            <div class="form-group">
+                                                <label style="font-weight: normal; ">
+                                                    <input type="checkbox"
+                                                           ng-model="filtro.excluir_movimientosTipoCierreAnual"
+                                                           ng-change="setIsEdited()">
+                                                    Excluir movimientos del tipo <em>Cierre anual</em>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+    </form>
+</div>
+
+<div class="row">
+    <hr class="blueLine" />
+
+    <a href="#" ng-click="limpiarFiltro()" class="btn btn-default btn-sm pull-left" style="min-width: 100px; margin-left: 30px; ">
+        Limpiar filtro
+    </a>
+
+    <button type="submit" form="filtroForm"  class="btn btn-primary btn-sm pull-right" style="min-width: 80px; margin-right: 50px; ">
+        Aplicar filtro
+    </button>
+</div>

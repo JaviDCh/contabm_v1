@@ -1,0 +1,31 @@
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+        <div ng-show="showProgress">
+            <div ng-show="processProgress.current != null" style="font-size: small; font-weight: bold; ">
+                ({{ processProgress.current }}/{{ processProgress.max }} - {{ processProgress.progress }})
+            </div>
+            <div ng-show="processProgress.message" style="font-size: x-small; font-weight: bold; ">
+                ({{ processProgress.message }})
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<h2>Copiar catálogos</h2>
+
+<div>
+    <button class="btn btn-primary btn-sm" ng-click="copiarCatalogos_nomina_DesdeContab()" style="margin-top: 10px; ">
+        Copiar catálogos ...
+    </button>
+
+</div>

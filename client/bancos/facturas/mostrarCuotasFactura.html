@@ -1,0 +1,66 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        Facturas - Cuotas
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: right; font-style: italic; ">
+                <span style="color: dodgerblue">{{ companiaContabSeleccionada.nombre }}</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <!-- <li ng-if="origen == 'edicion'"><a class="navbar_custom_small_header"> Cuotas de la factura</a></li>
+                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="determinarImpuestosRetenciones()">Determinar <span class="fa fa-gears"></span></a></li>
+                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="calcularFactura()">Calcular <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="redondearFactura()">Redondear <i style="color: darkgray; " class="fa fa-gears"></i></a></li>
+
+                                <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+                                <li ng-if="origen == 'edicion'"><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoImpuestosRetenciones()">Nuevo <span class="fa fa-file-o"></span></a></li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="cuotasFactura_ui_grid"
+                     ui-grid-resize-columns
+                     ui-grid-selection
+                     class="angularGrid"
+                     style="width: 100%; height: 150px; ">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <!-- <button type="submit" form="exportarAsientosContablesForm" class="btn btn-sm btn-primary" style="margin-right: 15px; min-width: 80px; ">Ok</button> -->
+                <button class="btn btn-sm btn-warning pull-right" ng-click="cancel()" style="margin-right: 10px; min-width: 80px; ">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

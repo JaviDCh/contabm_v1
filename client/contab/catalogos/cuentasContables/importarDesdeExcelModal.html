@@ -1,0 +1,92 @@
+
+
+<div class="modal-header">
+    <h5 class="modal-title">
+        <span>Importar cuentas contables desde Excel</span>
+    </h5>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-6 col-sm-offset-6" style="text-align: right; font-style: italic; ">
+                    <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+                <div class="col-sm-4 col-sm-offset-4" style="text-align: center; vertical-align: middle; ">
+                    <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" style="font-size: small; ">
+                <br />
+                <p>
+                    Esta función le permite registrar cuentas contables desde un documento Excel.
+                </p>
+                <p>
+                    Las cuentas contables que Ud. desee registrar deben estar contenidas como filas en el
+                    documento Excel. Ud. debe indicar la ubicación, en su PC, del documento Excel a este proceso. Luego
+                    hacer un <em>click</em> en el botón que permite importar las cuentas contables desde el documento.
+                </p>
+                <p>
+                    Si el documento Excel está bien construido, las cuentas contables serán agregadas a la lista,
+                    tal como si las hubiera registrado, una a una, Ud. mismo.
+                </p>
+                <p>
+                    Finalmente, este diálogo se cerrará y Ud. debe hacer un <em>click</em> en <em>Grabar</em> para registrar las cuentas contables en la
+                    base de datos. 
+                </p>
+                <p>
+                    Ud. puede revisar, en la lista, los datos que conforman las cuentas contables a registrar, antes
+                    de intentar grabar las mismas.
+                </p>
+
+                <form id="tratarFilesForm"
+                        name="tratarFilesForm"
+                        role="form"
+                        novalidate
+                        style="margin-top: 15px; "
+                        ng-submit="submit_TratarFilesForm()" >
+
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-6 col-sm-offset-0">
+                                    <div class="form-group form-group-sm">
+                                        <label  for="fileInputControl" class="control-label input-label pull-left">&nbsp;&nbsp;</label>
+                                        <br />
+                                        <input type="file"
+                                               id="fileInputControl"
+                                               name="fileInputControl"
+                                               accept="xlsx"
+                                               onchange="angular.element(this).scope().uploadFile(this.files)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="submit" class="btn btn-sm btn-primary" form="tratarFilesForm" style="min-width: 80px; ">Leer el documento Excel indicado</button>
+    <button ng-click="cancel()" class="btn btn-sm pull-right btn-warning" style="margin-right: 15px; min-width: 80px; ">Cerrar</button>
+</div>

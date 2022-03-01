@@ -1,0 +1,90 @@
+
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 style="margin: 0 0 0 30; color: #3183B9; text-align: left; ">Vacaciones - Días de vacaciones por año cumplido</h4>
+        <p style="margin: 0 0 0 30; text-align: left; ">
+            Registro de la cantidad de días de vaciones que otorga la empresa a sus empleados, por cada año 
+            de trabajo cumplido. </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="#" class="navbar_custom_small_node" ng-click="save()">Grabar <span class="fa fa-save"></span></a></li> 
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<div class="row" style="text-align: center; ">
+
+    <div class="col-sm-6 col-sm-offset-0">
+        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a class="navbar_custom_small_header">Días de vacaciones - Genéricos </a></li>
+                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoGenerales()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <div ui-grid="vacacionesPorAno_genericos_ui_grid"
+            ui-grid-edit
+            ui-grid-cellnav
+            ui-grid-resize-columns
+            ui-grid-selection
+            class="angularGrid"
+            style="height: 250px; width: 100%; ">
+        </div>
+    </div>
+
+
+    <div class="col-sm-6 col-sm-offset-0">
+        <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a class="navbar_custom_small_header">Días de vacaciones - por empleado </a></li>
+                        <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="nuevoEmpleado()">Nuevo <span class="fa fa-file-o"></span></a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+        <div ui-grid="vacacionesPorAno_empleado_ui_grid"
+            ui-grid-edit
+            ui-grid-cellnav
+            ui-grid-resize-columns
+            ui-grid-selection
+            class="angularGrid"
+            style="height: 250px; width: 100%; ">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,333 @@
+
+
+<div>
+
+    <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li ng-if="movimientoBancario.docState && (origen == 'edicion')"><a href="#" class="navbar_custom_small_header"><em>Movimientos bancarios</em> (<span class="fa fa-asterisk"></span>)</a></li>
+                    <li ng-if="!movimientoBancario.docState || (origen == 'consulta')"><a href="#" class="navbar_custom_small_header"><em>Movimientos bancarios</em></a></li>
+
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="grabar()" class="navbar_custom_small_node">Grabar&nbsp;&nbsp;<span class="fa fa-floppy-o"></span></a></li>
+                    <li><a href="#" ng-click="refresh0()" class="navbar_custom_small_node">Refresh&nbsp;&nbsp;<span class="fa fa-refresh"></span></a></li>
+
+                    <li class="divider-vertical-small"></li>
+
+                    <li  ng-if="origen == 'edicion' && !vieneDeAfuera"><a href="#" ng-click="nuevo0()" class="navbar_custom_small_node">Nuevo&nbsp;&nbsp;<span class="fa fa-file-o"></span></a></li>
+                    <li ng-if="origen == 'edicion'"><a href="#" ng-click="eliminar()" class="navbar_custom_small_node">Eliminar&nbsp;&nbsp;<span class="fa fa-times"></span></a></li>
+
+                    <li ng-if="origen == 'edicion'" class="divider-vertical-small"></li>
+
+                    <li><a href="#" ng-click="asientoContable()" class="navbar_custom_small_node">Asiento contable</a></li>
+
+                    <li class="divider-vertical-small"></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Varios <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" ng-click="chequeImpreso()" class="navbar_custom_small_node">Cheque impreso&nbsp;&nbsp;<span class="fa fa-file-word-o"></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-if="!vieneDeAfuera"><a href="#" ng-click="regresarALista()" class="navbar_custom_small_node">Regresar ...</a></li>
+                    <li ng-if="vieneDeAfuera"><a href="#" ng-click="windowClose()" class="navbar_custom_small_node_red">Cerrar <span class="fa fa-times-circle"></span></a></li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <input type="file"
+           id = "fileInput"
+           accept = ".txt"
+           multiple = "false"
+           onchange = "angular.element(this).scope().uploadFile(this.files)"
+           ng-show="false">
+
+    <div class="container-fluid ui-viewBorder">
+
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+                <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <alert ng-repeat="alert in alerts" type="{{ alert.type }}" close="closeAlert($index)">
+                    <span ng-bind-html="alert.msg | unsafe"></span>
+                </alert>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0">
+
+                <form
+                      role="form"
+                      name="movimientosBancariosForm"
+                      novalidate
+                      style="margin-top: 5px; text-align: left; font-size: small; ">
+
+                        <div class="row row-centered">
+                            <!-- tipo -->
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label for="tipo">Tipo</label>
+                                    <select class="form-control"
+                                            name="tipo"
+                                            id="tipo"
+                                            ng-model="movimientoBancario.tipo"
+                                            ng-change="setIsEdited('tipo')"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            required>
+                                            <option value="CH">Cheque</option>
+                                            <option value="DP">Depósito</option>
+                                            <option value="ND">Nota débito</option>
+                                            <option value="NC">Nota crédito</option>
+                                            <option value="TR">Transferencia</option>
+                                            <option value="ID">Imp débito</option>
+                                            <option value="IT">Imp trans financ</option>
+                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 col-centered">
+                            </div>
+
+                            <!-- fecha -->
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label for="fecha">Fecha</label>
+                                    <input type="date"
+                                           name="fecha"
+                                           id="fecha"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.fecha"
+                                           ng-change="setIsEdited('fecha')"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <!-- claveUnicaChequera -->
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label for="claveUnicaChequera">Chequera</label>
+                                    <select class="form-control"
+                                            name="claveUnicaChequera"
+                                            id="claveUnicaChequera"
+                                            ng-model="movimientoBancario.claveUnicaChequera"
+                                            ng-change="setIsEdited('claveUnicaChequera')"
+                                            ng-options="item.numeroChequera as (item | formatChequera) for item in chequerasList"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            required></select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 col-centered">
+                            </div>
+
+                            <!-- provClte -->
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label for="provClte">Compañía</label>
+                                    <select class="form-control"
+                                            name="provClte"
+                                            id="provClte"
+                                            ng-model="movimientoBancario.provClte"
+                                            ng-change="setIsEdited('provClte')"
+                                            ng-options="item.proveedor as item.nombre for item in proveedores | orderBy:'nombre'"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            required></select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row row-centered">
+                            <!-- transaccion -->
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label for="transaccion">Número</label>
+                                    <input type="number"
+                                            name="transaccion"
+                                            id="transaccion"
+                                            class="form-control"
+                                            ng-model="movimientoBancario.transaccion"
+                                            ng-change="setIsEdited('transaccion')"
+                                            ng-required="true"
+                                            ng-model-options="{ updateOn: 'blur' }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1 col-centered">
+                            </div>
+
+                            <!-- signo -->
+                            <div class="col-sm-4 col-centered">
+                                <div class="form-group">
+                                    <label for="signo">Signo</label>
+                                    <select class="form-control"
+                                            name="signo"
+                                            id="signo"
+                                            ng-model="movimientoBancario.signo"
+                                            ng-change="setIsEdited('signo')"
+                                            ng-options="item.value as item.label for item in signoOptions"
+                                            ng-model-options="{ updateOn: 'blur' }"
+                                            required>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row row-centered">
+                            <!-- beneficiario -->
+                            <div class="col-sm-9 col-centered">
+                                <div class="form-group">
+                                    <label for="beneficiario">Beneficiario</label>
+                                    <textarea name="beneficiario"
+                                           id="beneficiario"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.beneficiario"
+                                           ng-change="setIsEdited('beneficiario')"
+                                           ng-model-options="{ updateOn: 'blur' }"
+                                           rows="1"
+                                           ng-required="true">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <!-- concepto -->
+                            <div class="col-sm-9 col-centered">
+                                <div class="form-group">
+                                    <label for="concepto">Concepto</label>
+                                    <textarea name="concepto"
+                                           id="concepto"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.concepto"
+                                           ng-change="setIsEdited('concepto')"
+                                           ng-model-options="{ updateOn: 'blur' }"
+                                           rows="1"
+                                           ng-required="true">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <div class="col-sm-3 col-centered">
+                                <!-- montoBase -->
+                                <div class="form-group">
+                                    <label for="montoBase">Monto base</label>
+                                    <input type="number"
+                                           name="montoBase"
+                                           id="montoBase"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.montoBase"
+                                           ng-change="setIsEdited('montoBase')"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-centered">
+                                <!-- comision -->
+                                <div class="form-group">
+                                    <label for="comision">Comisión</label>
+                                    <input type="number"
+                                           name="comision"
+                                           id="comision"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.comision"
+                                           ng-change="setIsEdited('comision')"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-centered">
+                                <!-- impuestos -->
+                                <div class="form-group">
+                                    <label for="impuestos">Impuesto</label>
+                                    <input type="number"
+                                           name="impuestos"
+                                           id="impuestos"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.impuestos"
+                                           ng-change="setIsEdited('impuestos')"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered">
+                            <!--  -->
+                            <!-- fechaEntregado -->
+                            <div class="col-sm-3 col-centered">
+                                <div class="form-group">
+                                    <label for="fechaEntregado">Entregado el</label>
+                                    <input type="date"
+                                           name="fechaEntregado"
+                                           id="fechaEntregado"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.fechaEntregado"
+                                           ng-change="setIsEdited('fechaEntregado')"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-centered">
+                            </div>
+
+                            <div class="col-sm-3 col-centered">
+                                <!-- monto -->
+                                <div class="form-group">
+                                    <label for="monto">Monto</label>
+                                    <input type="number"
+                                           name="monto"
+                                           id="monto"
+                                           class="form-control"
+                                           ng-model="movimientoBancario.monto"
+                                           ng-change="setIsEdited('monto')"
+                                           ng-required="true"
+                                           ng-model-options="{ updateOn: 'blur' }" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row row-centered" style="background-color: #F2F2F2; border: 1px solid darkgray; font-size: x-small; ">
+                            <!-- ingreso, ult actualización y usuario  -->
+                            <div class="col-sm-3 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Ingreso: </label>
+                                <br />
+                                <span>{{ movimientoBancario.ingreso | date:'dd-MM-yyyy hh:mm a'}} </span>
+                            </div>
+                            <div class="col-sm-3 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Ult act: </label>
+                                <br />
+                                <span>{{ movimientoBancario.ultMod | date:'dd-MM-yyyy hh:mm a'}} </span>
+                            </div>
+                            <div class="col-sm-3 col-centered" style="text-align: center; ">
+                                <label style="font-size: x-small; ">Usuario: </label>
+                                <br />
+                                <span>{{ movimientoBancario.usuario }} </span>
+                            </div>
+                        </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

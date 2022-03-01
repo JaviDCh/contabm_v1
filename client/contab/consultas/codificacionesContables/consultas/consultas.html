@@ -1,0 +1,83 @@
+
+
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
+            <span ng-bind-html="alert.msg | unsafe"></span>
+        </alert>
+    </div>
+</div>
+
+<tabset>
+    <tab heading="Consultar">
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <h4>Códificaciones contables - Consulta</h4>
+            </div>
+        </div>
+
+        <div class="row" style="text-align: center; ">
+            <div class="col-sm-4 col-sm-offset-4">
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Codificaciones contables </a></li>
+                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="agregarCodificacion()">Nuevo <span class="fa fa-file-o"></span></a></li> -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="codificaciones_ui_grid"
+                    ui-grid-resize-columns
+                    ui-grid-selection
+                    class="angularGrid"
+                    style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+        </div>
+    </tab>
+
+    <tab heading="Codificación seleccionada">
+        <div class="row">
+            <div class="col-sm-12 col-sm-offset-0" style="text-align: left; ">
+                <h4>Códigos para la codificación contable <em>{{ codificacionSeleccionada ? codificacionSeleccionada.descripcion : '' }}</em></h4>
+            </div>
+        </div>
+
+        <div class="row" style="text-align: center; ">
+            <div class="col-sm-12 col-sm-offset-0">
+                <nav class="navbar navbar-default navbar_custom_small_toolBar" role="navigation">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#" class="navbar_custom_small_header">Codificaciones contables </a></li>
+                                <li><a href="#" ng-click="exportarExcel()" class="navbar_custom_small_node">Exportar&nbsp;&nbsp;<span class="fa fa-file-excel-o"></span></a></li>
+                                <!-- <li><a href="#" class="navbar_custom_small_node_withBackground" ng-click="agregarCodificacion()">Nuevo <span class="fa fa-file-o"></span></a></li> -->
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <div ui-grid="codificacionContable_movimientos_ui_grid"
+                    ui-grid-resize-columns
+                    ui-grid-selection
+                    ui-grid-pinning
+                    class="angularGrid"
+                    style="height: 250px; width: 100%; ">
+                </div>
+            </div>
+        </div>
+    </tab>
+</tabset>

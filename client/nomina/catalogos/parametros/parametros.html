@@ -1,0 +1,59 @@
+
+
+<div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4" style="text-align: center; vertical-align: middle; ">
+        <i style="color: #428BCA" class="fa fa-circle-o-notch fa-spin fa-2x" ng-show="showProgress"></i>
+    </div>
+    <div class="col-sm-4" style="text-align: right; font-style: italic; ">
+        <span style="color: dodgerblue">{{ companiaSeleccionada.nombre }}</span>
+    </div>
+</div>
+
+
+ <nav class="navbar navbar-inverse navbar_custom_small_fullWidth" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+                <li><a href="#" class="navbar_custom_small_header">Nómina - Parámetros</a></li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Sueldo y deducciones <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref=".anticipoSueldo1raQuincena" class="navbar_custom_small_node">Anticipos de sueldo (nóminas quincenales)</a></li>
+                        <li><a ui-sref=".salarioMinimo" class="navbar_custom_small_node">Salario mínimo</a></li>
+                        <li><a ui-sref=".deduccionesNomina" class="navbar_custom_small_node">Deducciones legales</a></li>
+                        <li><a ui-sref=".deduccionesIslr" class="navbar_custom_small_node">Islr</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Vacaciones <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref=".diasVacacionesPorAno" class="navbar_custom_small_node">Tabla de días de vacaciones por año</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Contabilidad <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref=".cuentasContablesEmpleadoRubro" class="navbar_custom_small_node">Contabilización de la nómina</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle navbar_custom_small_node" data-toggle="dropdown" role="button" aria-expanded="false">Generales <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref=".parametrosNomina" class="navbar_custom_small_node">Parámetros de nómina</a></li>
+                        <li><a ui-sref=".diasFeriados" class="navbar_custom_small_node">Días feriados</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div ui-view class="ui-viewBorder"></div>
