@@ -11,5 +11,5 @@ updates:
       interval: "daily"
       time: "14:40"
       timezone: "America/Bogota"
-      target-branch: "main"  #define la branch (rama) objetivo
+    target-branch: "main"  #define la branch (rama) objetivo
     open-pull-requests-limit: 10  #permite definir cuantos pull request pude abrir (por defecto son 5)
