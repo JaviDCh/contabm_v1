@@ -9,7 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-      time: "14:40"
+      time: "14:42"
       timezone: "America/Bogota"
     #target-branch: "main"  #define la branch (rama) objetivo
     open-pull-requests-limit: 10  #permite definir cuantos pull request pude abrir (por defecto son 5)
