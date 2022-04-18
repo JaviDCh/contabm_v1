@@ -12,9 +12,12 @@ updates:
       time: "15:11"
       timezone: "America/Bogota"
     #target-branch: "main"  #define la branch (rama) objetivo
-    open-pull-requests-limit: 12  #permite definir cuantos pull request pude abrir (por defecto son 5)    
+    open-pull-requests-limit: 8  #permite definir cuantos pull request pude abrir (por defecto son 5)    
     
-    target-branch: "main"  #define la branch (rama) objetivo
+    target-branch: "develop"  #define la branch (rama) objetivo
 
     labels:
       - "npm dependencies"
+    
+    reviewers:
+      - "octocat"
