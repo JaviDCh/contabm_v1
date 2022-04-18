@@ -30,7 +30,7 @@
     "sequelize": "4.0.0",
     "simpl-schema": "0.3.2",
     "tedious": "1.14.0",
-    "written-number": "^0.8.1",
+    "written-number": "^0.11.1",
     "xlsx": "0.9.13",
     "xlsx-injector": "0.0.3"
   }
