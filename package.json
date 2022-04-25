@@ -25,7 +25,7 @@
     "meteor-node-stubs": "0.2.4",
     "moment": "2.19.3",
     "numeral": "2.0.4",
-    "papaparse": "4.1.1",
+    "papaparse": "5.3.2",
     "save-as": "0.1.8",
     "sequelize": "4.0.0",
     "simpl-schema": "0.3.2",
