@@ -31,7 +31,7 @@
     "simpl-schema": "1.12.0",
     "tedious": "1.14.0",
     "written-number": "^0.8.1",
-    "xlsx": "0.9.13",
+    "xlsx": "0.18.5",
     "xlsx-injector": "0.0.4"
   }
 }
