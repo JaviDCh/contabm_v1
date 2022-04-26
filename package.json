@@ -24,7 +24,7 @@
     "lodash": "4.17.21",
     "meteor-node-stubs": "1.2.1",
     "moment": "2.19.3",
-    "numeral": "2.0.4",
+    "numeral": "2.0.6",
     "papaparse": "5.3.2",
     "save-as": "0.1.8",
     "sequelize": "4.0.0",
