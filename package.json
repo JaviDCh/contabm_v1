@@ -7,7 +7,7 @@
   "dependencies": {
     "@types/angular": "^1.6.32",
     "@types/angular-meteor": "^0.8.32",
-    "@types/es6-promise": "0.0.33",
+    "@types/es6-promise": "3.3.0",
     "@types/lodash": "^4.14.77",
     "@types/meteor": "^2.6.3",
     "@types/sequelize": "^4.27.14",
